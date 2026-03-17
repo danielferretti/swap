@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#131C25">
+<title>Franq Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+--primary:#687BEA;--primary-light:#8191ED;--primary-dark:#45529C;--primary-press:#2E3944;
+--accent:#687BEA;--accent-light:#8191ED;--accent-dark:#45529C;
+--success:#16602F;--success-light:#96D8BC;--danger:#A32D29;--danger-light:#FDD2D1;--info:#3B82F6;
+--bg-dark:#131C25;--bg-card:rgba(255,255,255,0.07);--bg-card-hover:rgba(255,255,255,0.12);
+--text-primary:#FFFFFF;--text-secondary:rgba(255,255,255,0.7);--text-muted:rgba(255,255,255,0.4);
+--gold:#FFD700;--silver:#C0C0C0;--bronze:#CD7F32;
+--gradient-main:linear-gradient(135deg,#131C25 0%,#1E2A36 50%,#131C25 100%);
+--gradient-card:linear-gradient(135deg,rgba(104,123,234,0.12),rgba(130,144,239,0.06));
+--gradient-accent:linear-gradient(135deg,#687BEA,#45529C);
+--gradient-success:linear-gradient(135deg,#16602F,#4B4F4C);
+--gradient-purple:linear-gradient(135deg,#687BEA,#8191ED);
+--shadow:0 4px 24px rgba(0,0,0,0.4);
+--radius:16px;--radius-sm:12px;--radius-lg:24px;
+}
+html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;background:var(--bg-dark);color:var(--text-primary);-webkit-tap-highlight-color:transparent;user-select:none}
+#app{width:100%;height:100%;max-width:430px;margin:0 auto;position:relative;overflow:hidden;background:var(--gradient-main)}
+.screen{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;transition:transform .4s cubic-bezier(.4,0,.2,1),opacity .4s ease;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+.screen.hidden{transform:translateX(100%);opacity:0;pointer-events:none}
+.screen.slide-left{transform:translateX(-100%);opacity:0;pointer-events:none}
+
+/* ===== SPLASH ===== */
+#splash{background:linear-gradient(180deg,#131C25 0%,#1E2A36 40%,#2E3944 100%);justify-content:center;align-items:center;z-index:100}
+#splash .logo-container{text-align:center;animation:fadeInUp .8s ease}
+#splash .logo-icon{width:120px;height:120px;background:var(--gradient-purple);border-radius:32px;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:0 0 60px rgba(104,123,234,0.4);position:relative;overflow:hidden}
+#splash .logo-icon::after{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent 30%,rgba(255,255,255,0.1) 50%,transparent 70%);animation:shimmer 2s infinite}
+#splash .logo-icon svg{width:64px;height:64px;fill:white}
+#splash h1{font-size:32px;font-weight:800;letter-spacing:6px;background:linear-gradient(135deg,#fff,#B0BBFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-transform:uppercase}
+#splash .tagline{font-size:14px;color:var(--text-secondary);margin-top:8px;font-weight:400;letter-spacing:2px;text-transform:uppercase}
+#splash .loader{margin-top:48px;width:200px;height:3px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden}
+#splash .loader-bar{height:100%;width:0;background:var(--gradient-accent);border-radius:4px;transition:width .1s linear}
+
+/* ===== LOGIN ===== */
+#login{background:var(--gradient-main);justify-content:center;padding:32px}
+#login .login-header{text-align:center;margin-bottom:40px}
+#login .login-logo{width:80px;height:80px;background:var(--gradient-purple);border-radius:24px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 0 40px rgba(104,123,234,0.35)}
+#login .login-logo svg{width:44px;height:44px;fill:white}
+#login h2{font-size:28px;font-weight:800}
+#login .login-sub{color:var(--text-secondary);margin-top:4px;font-size:14px}
+.input-group{margin-bottom:16px}
+.input-group label{display:block;font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px}
+.input-group input{width:100%;padding:14px 16px;background:var(--bg-card);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-sm);color:white;font-size:16px;font-family:inherit;outline:none;transition:border-color .2s}
+.input-group input:focus{border-color:var(--primary-light)}
+.input-group input::placeholder{color:var(--text-muted)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 24px;border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:1px}
+.btn:active{transform:scale(0.97)}
+.btn-primary{background:var(--gradient-accent);color:#fff;box-shadow:0 4px 20px rgba(104,123,234,0.35)}
+.btn-primary:hover{background:var(--primary-dark);box-shadow:0 6px 28px rgba(104,123,234,0.45)}
+.btn-primary:active{background:var(--primary-press);transform:scale(0.97)}
+.btn-secondary{background:var(--bg-card);color:white;border:1px solid rgba(255,255,255,0.15)}
+.btn-ghost{background:transparent;color:var(--text-secondary);padding:8px 16px}
+.btn-sm{padding:10px 16px;font-size:13px}
+.btn-round{border-radius:50px}
+.btn-block{width:100%}
+.btn-icon{width:44px;height:44px;padding:0;border-radius:12px}
+.btn-success{background:var(--gradient-success);color:white}
+.btn-danger{background:var(--danger);color:white}
+
+/* ===== HOME ===== */
+#home{padding:0 0 80px}
+.home-header{padding:20px 20px 0;display:flex;align-items:center;justify-content:space-between}
+.profile-mini{display:flex;align-items:center;gap:12px}
+.avatar{border-radius:50%;object-fit:cover;border:2px solid var(--primary-light)}
+.avatar-sm{width:44px;height:44px}
+.avatar-md{width:56px;height:56px}
+.avatar-lg{width:80px;height:80px}
+.avatar-xl{width:100px;height:100px}
+.profile-mini .info h3{font-size:16px;font-weight:700}
+.profile-mini .info p{font-size:12px;color:var(--text-secondary)}
+.header-actions{display:flex;gap:8px}
+.icon-btn{width:40px;height:40px;border-radius:12px;background:var(--bg-card);border:none;color:white;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s;position:relative}
+.icon-btn:active{background:var(--bg-card-hover)}
+.badge-count{position:absolute;top:-4px;right:-4px;background:var(--danger);color:white;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+
+.section-title{padding:24px 20px 12px;display:flex;align-items:center;justify-content:space-between}
+.section-title h2{font-size:18px;font-weight:700}
+.section-title a{font-size:13px;color:var(--accent);font-weight:600;text-decoration:none}
+
+/* Play buttons */
+.play-actions{padding:0 20px;display:flex;gap:12px;margin-top:16px}
+.play-btn{flex:1;padding:16px;border-radius:var(--radius);border:none;font-family:inherit;cursor:pointer;text-align:center;transition:all .2s}
+.play-btn:active{transform:scale(0.97)}
+.play-btn.primary{background:var(--gradient-accent);color:#fff}
+.play-btn.secondary{background:var(--gradient-purple);color:white}
+.play-btn .icon{font-size:28px;margin-bottom:4px}
+.play-btn .label{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.play-btn .sub{font-size:11px;opacity:.7;margin-top:2px;font-weight:400;text-transform:none;letter-spacing:0}
+
+/* Challenges card */
+.challenges-card{margin:16px 20px 0;background:var(--gradient-card);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius);padding:16px;display:flex;gap:12px}
+.challenge-item{flex:1;display:flex;align-items:center;gap:10px;padding:10px;border-radius:var(--radius-sm);background:rgba(255,255,255,0.04);cursor:pointer;transition:background .2s}
+.challenge-item:active{background:rgba(255,255,255,0.08)}
+.challenge-item .c-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.challenge-item .c-icon.pending{background:rgba(104,123,234,0.15);color:var(--accent)}
+.challenge-item .c-icon.results{background:rgba(16,185,129,0.15);color:var(--success)}
+.challenge-item .c-info{font-size:12px;color:var(--text-secondary);line-height:1.3}
+.challenge-item .c-info strong{display:block;font-size:14px;color:white;font-weight:600}
+
+/* Topics carousel */
+.topics-scroll{display:flex;gap:12px;padding:0 20px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.topics-scroll::-webkit-scrollbar{display:none}
+.topic-card{min-width:160px;scroll-snap-align:start;background:var(--gradient-card);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius);padding:16px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.topic-card:active{transform:scale(0.97)}
+.topic-card.featured{border-color:rgba(104,123,234,0.3);min-width:180px}
+.topic-card.featured::before{content:'TÓPICO DA HORA';position:absolute;top:0;left:0;right:0;padding:4px 0;background:var(--gradient-accent);font-size:9px;font-weight:800;text-align:center;color:#fff;letter-spacing:1.5px}
+.topic-card .t-icon{font-size:32px;margin-bottom:8px}
+.topic-card.featured .t-icon{margin-top:16px}
+.topic-card .t-name{font-size:13px;font-weight:700;margin-bottom:4px;line-height:1.2}
+.topic-card .t-level{font-size:11px;color:var(--text-muted)}
+.topic-card .t-double{display:inline-block;background:rgba(104,123,234,0.2);color:var(--accent);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:6px}
+
+/* Leaderboard preview */
+.lb-preview{margin:0 20px;background:var(--gradient-card);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius);padding:16px;overflow:hidden}
+.lb-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.lb-header h3{font-size:15px;font-weight:700}
+.lb-timer{font-size:11px;color:var(--accent);font-weight:600}
+.lb-entry{display:flex;align-items:center;gap:12px;padding:8px 0}
+.lb-entry+.lb-entry{border-top:1px solid rgba(255,255,255,0.05)}
+.lb-rank{width:28px;text-align:center;font-size:16px;font-weight:800}
+.lb-rank.gold{color:var(--gold)}
+.lb-rank.silver{color:var(--silver)}
+.lb-rank.bronze{color:var(--bronze)}
+.lb-entry .info{flex:1}
+.lb-entry .info .name{font-size:13px;font-weight:600}
+.lb-entry .info .title{font-size:11px;color:var(--text-muted)}
+.lb-entry .points{font-size:14px;font-weight:700;color:var(--accent)}
+
+/* ===== BOTTOM NAV ===== */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(19,28,37,0.95);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.06);display:flex;padding:8px 0;padding-bottom:max(8px,env(safe-area-inset-bottom));z-index:50}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;background:none;border:none;color:var(--text-muted);font-family:inherit;font-size:10px;font-weight:600;cursor:pointer;transition:color .2s;text-transform:uppercase;letter-spacing:.5px}
+.nav-item.active{color:var(--accent)}
+.nav-item svg{width:22px;height:22px;transition:color .2s}
+
+/* ===== TOPICS LIST ===== */
+#topics{padding:0 0 80px}
+.top-bar{padding:16px 20px;display:flex;align-items:center;gap:12px}
+.top-bar h2{font-size:20px;font-weight:800;flex:1}
+.back-btn{width:36px;height:36px;border-radius:10px;background:var(--bg-card);border:none;color:white;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.topics-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 20px}
+.topic-tile{background:var(--gradient-card);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius);padding:20px 16px;text-align:center;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.topic-tile:active{transform:scale(0.97)}
+.topic-tile.hot{border-color:rgba(104,123,234,0.3)}
+.topic-tile.hot::after{content:'🔥 2x PONTOS';position:absolute;top:8px;right:8px;background:var(--gradient-accent);font-size:9px;font-weight:800;padding:3px 8px;border-radius:20px;color:#fff;letter-spacing:.5px}
+.topic-tile .tile-icon{font-size:40px;margin-bottom:8px}
+.topic-tile .tile-name{font-size:14px;font-weight:700;margin-bottom:2px}
+.topic-tile .tile-level{font-size:11px;color:var(--text-muted)}
+.topic-tile .tile-rank{font-size:11px;color:var(--primary-light);margin-top:4px}
+
+/* ===== MATCHMAKING ===== */
+#matchmaking{background:linear-gradient(180deg,#131C25,#1E2A36);justify-content:center;align-items:center;padding:32px;text-align:center}
+.match-topic{font-size:13px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:32px}
+.match-players{display:flex;align-items:center;gap:24px;margin-bottom:32px}
+.match-player{text-align:center}
+.match-player .mp-avatar{width:80px;height:80px;border-radius:50%;border:3px solid var(--primary-light);margin:0 auto 8px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--bg-card);font-size:36px}
+.match-player .mp-name{font-size:14px;font-weight:600;max-width:100px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.match-player .mp-title{font-size:11px;color:var(--text-muted)}
+.match-player .mp-level{font-size:11px;color:var(--primary-light);margin-top:2px}
+.match-vs{font-size:28px;font-weight:900;color:var(--accent);text-shadow:0 0 20px rgba(104,123,234,0.3)}
+.match-status{font-size:14px;color:var(--text-secondary);margin-bottom:24px}
+.match-status .dots{display:inline-block;width:24px;text-align:left}
+.match-countdown{font-size:72px;font-weight:900;color:var(--accent);text-shadow:0 0 40px rgba(104,123,234,0.4);animation:pulse 1s ease infinite}
+
+/* ===== GAMEPLAY ===== */
+#gameplay{background:var(--bg-dark);padding:0}
+.game-top{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,0.3)}
+.game-top .g-topic{font-size:11px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.game-top .g-round{font-size:11px;color:var(--text-muted)}
+.game-top .g-quit{background:none;border:none;color:var(--text-muted);font-size:11px;font-family:inherit;cursor:pointer;padding:4px 8px}
+.game-scores{display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
+.g-player{display:flex;align-items:center;gap:8px}
+.g-player.right{flex-direction:row-reverse}
+.g-player .gp-avatar{width:36px;height:36px;border-radius:50%;border:2px solid var(--primary-light);overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--bg-card);font-size:18px}
+.g-player .gp-name{font-size:12px;font-weight:600;max-width:80px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.g-player .gp-score{font-size:18px;font-weight:800}
+.g-player .gp-score.winning{color:var(--success-light)}
+.g-player .gp-score.losing{color:var(--danger-light)}
+.score-bar{height:4px;background:rgba(255,255,255,0.1);border-radius:2px;margin:0 16px;overflow:hidden;display:flex}
+.score-bar .sb-left{background:var(--primary-light);transition:width .5s ease}
+.score-bar .sb-right{background:var(--accent);transition:width .5s ease;margin-left:auto}
+
+/* Timer */
+.timer-container{padding:8px 16px}
+.timer-bar{height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden}
+.timer-fill{height:100%;border-radius:3px;transition:width .1s linear,background .3s}
+.timer-fill.safe{background:var(--success-light)}
+.timer-fill.warning{background:var(--accent)}
+.timer-fill.danger{background:var(--danger-light);animation:timerPulse .5s infinite}
+.timer-label{text-align:center;font-size:24px;font-weight:800;margin-top:4px}
+
+/* Question */
+.question-area{flex:1;display:flex;flex-direction:column;padding:16px}
+.question-text{font-size:18px;font-weight:700;text-align:center;line-height:1.4;margin-bottom:20px;min-height:60px;display:flex;align-items:center;justify-content:center}
+.answers-grid{display:flex;flex-direction:column;gap:10px;flex:1}
+.answer-btn{width:100%;padding:16px;background:var(--bg-card);border:2px solid rgba(255,255,255,0.1);border-radius:var(--radius-sm);color:white;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;text-align:left;display:flex;align-items:center;gap:12px;min-height:54px}
+.answer-btn:active:not(.disabled){transform:scale(0.98)}
+.answer-btn .a-letter{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.answer-btn.selected{border-color:var(--primary-light);background:rgba(104,123,234,0.25)}
+.answer-btn.correct{border-color:var(--success-light);background:rgba(150,216,188,0.18)}
+.answer-btn.correct .a-letter{background:var(--success-light);color:#16602F}
+.answer-btn.wrong{border-color:var(--danger-light);background:rgba(253,210,209,0.15)}
+.answer-btn.wrong .a-letter{background:var(--danger-light);color:#A32D29}
+.answer-btn.disabled{opacity:.5;pointer-events:none}
+.answer-btn.hidden-5050{opacity:.15;pointer-events:none}
+
+/* Power ups */
+.powerups-bar{display:flex;gap:8px;padding:12px 16px;justify-content:center}
+.pu-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 12px;background:var(--bg-card);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s;min-width:64px;font-family:inherit;color:white}
+.pu-btn:active:not(.used):not(.locked){transform:scale(0.95)}
+.pu-btn .pu-icon{font-size:20px}
+.pu-btn .pu-cost{font-size:9px;color:var(--accent);font-weight:700}
+.pu-btn.used{opacity:.3;pointer-events:none}
+.pu-btn.locked{opacity:.3;pointer-events:none}
+.pu-btn.active-pu{border-color:var(--accent);background:rgba(104,123,234,0.15);animation:glowPu 1s infinite}
+.coins-display{display:flex;align-items:center;justify-content:center;gap:6px;padding:4px 0;font-size:13px;font-weight:700;color:var(--accent)}
+
+/* ===== RESULTS ===== */
+#results{background:linear-gradient(180deg,#131C25,#1E2A36);padding:24px 20px;justify-content:center;align-items:center;text-align:center;overflow-y:auto}
+.result-banner{margin-bottom:20px}
+.result-banner h1{font-size:36px;font-weight:900;margin-bottom:4px}
+.result-banner h1.win{color:var(--success-light);text-shadow:0 0 30px rgba(150,216,188,0.4)}
+.result-banner h1.lose{color:var(--danger-light);text-shadow:0 0 30px rgba(253,210,209,0.4)}
+.result-banner h1.draw{color:var(--accent);text-shadow:0 0 30px rgba(104,123,234,0.4)}
+.result-players{display:flex;align-items:center;justify-content:center;gap:20px;margin-bottom:24px}
+.rp{text-align:center}
+.rp .rp-avatar{width:60px;height:60px;border-radius:50%;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:28px;border:3px solid transparent}
+.rp.winner .rp-avatar{border-color:var(--success-light)}
+.rp.loser .rp-avatar{border-color:var(--danger-light)}
+.rp .rp-name{font-size:13px;font-weight:600}
+.rp .rp-score{font-size:22px;font-weight:800;margin-top:2px}
+.rp .vs-text{font-size:20px;font-weight:900;color:var(--text-muted);align-self:center}
+.result-rewards{background:var(--bg-card);border-radius:var(--radius);padding:16px;margin-bottom:20px;width:100%;text-align:left}
+.reward-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+.reward-row+.reward-row{border-top:1px solid rgba(255,255,255,0.05)}
+.reward-row .rr-label{font-size:13px;color:var(--text-secondary)}
+.reward-row .rr-value{font-size:15px;font-weight:700}
+.reward-row .rr-value.points{color:var(--primary-light)}
+.reward-row .rr-value.coins{color:var(--accent)}
+.result-level{background:var(--bg-card);border-radius:var(--radius);padding:16px;margin-bottom:20px;width:100%}
+.level-info{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.level-info .lv{font-size:14px;font-weight:700}
+.level-info .lv span{color:var(--accent)}
+.level-bar{height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden}
+.level-fill{height:100%;background:var(--gradient-accent);border-radius:4px;transition:width 1s ease}
+.result-actions{display:flex;flex-direction:column;gap:10px;width:100%}
+
+/* ===== LEADERBOARD ===== */
+#leaderboard{padding:0 0 80px}
+.lb-tabs{display:flex;gap:0;padding:0 20px;margin-bottom:16px}
+.lb-tab{flex:1;padding:10px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text-muted);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;text-align:center}
+.lb-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.lb-full-list{padding:0 20px}
+.lb-full-entry{display:flex;align-items:center;gap:12px;padding:12px 0}
+.lb-full-entry+.lb-full-entry{border-top:1px solid rgba(255,255,255,0.05)}
+.lb-full-entry .rank{width:32px;text-align:center;font-size:16px;font-weight:800}
+.lb-full-entry .rank.r1{color:var(--gold)}
+.lb-full-entry .rank.r2{color:var(--silver)}
+.lb-full-entry .rank.r3{color:var(--bronze)}
+.lb-full-entry .av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;background:var(--bg-card);flex-shrink:0}
+.lb-full-entry .det{flex:1}
+.lb-full-entry .det .nm{font-size:14px;font-weight:600}
+.lb-full-entry .det .rl{font-size:11px;color:var(--text-muted)}
+.lb-full-entry .pts{font-size:15px;font-weight:700;color:var(--accent)}
+.lb-full-entry.me{background:rgba(104,123,234,0.15);border-radius:var(--radius-sm);padding:12px;margin:-1px 0}
+
+/* ===== PROFILE ===== */
+#profile{padding:0 0 80px}
+.profile-header{text-align:center;padding:24px 20px;background:var(--gradient-card);margin:0 20px;border-radius:var(--radius);margin-top:16px}
+.profile-header .p-avatar{width:80px;height:80px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:40px;border:3px solid var(--accent);background:var(--bg-card)}
+.profile-header h2{font-size:20px;font-weight:800}
+.profile-header .p-role{font-size:13px;color:var(--text-secondary);margin-top:2px}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:16px 20px}
+.stat-card{background:var(--bg-card);border-radius:var(--radius-sm);padding:14px;text-align:center}
+.stat-card .s-value{font-size:22px;font-weight:800;color:var(--accent)}
+.stat-card .s-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.profile-medals{padding:0 20px}
+.medals-grid{display:flex;gap:12px;flex-wrap:wrap;padding:8px 0}
+.medal{width:48px;height:48px;border-radius:50%;background:var(--bg-card);display:flex;align-items:center;justify-content:center;font-size:24px;border:2px solid rgba(255,255,255,0.08)}
+.medal.earned{border-color:var(--accent);box-shadow:0 0 12px rgba(104,123,234,0.25)}
+.medal.locked{opacity:.3}
+
+/* ===== SETTINGS ===== */
+#settings{padding:0 0 80px}
+.settings-list{padding:0 20px}
+.setting-item{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.setting-item .si-left{display:flex;align-items:center;gap:12px}
+.setting-item .si-icon{font-size:20px}
+.setting-item .si-label{font-size:14px;font-weight:500}
+.toggle{width:48px;height:28px;border-radius:14px;background:rgba(255,255,255,0.15);position:relative;cursor:pointer;transition:background .2s;border:none}
+.toggle.on{background:var(--success)}
+.toggle .toggle-dot{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:white;transition:transform .2s;box-shadow:0 2px 4px rgba(0,0,0,0.2)}
+.toggle.on .toggle-dot{transform:translateX(20px)}
+
+/* ===== ROUND TRANSITION ===== */
+.round-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:90;opacity:0;pointer-events:none;transition:opacity .3s}
+.round-overlay.show{opacity:1;pointer-events:auto}
+.round-overlay .ro-round{font-size:16px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:3px;margin-bottom:8px}
+.round-overlay .ro-num{font-size:64px;font-weight:900;color:white}
+.round-overlay .ro-powerup{margin-top:16px;padding:8px 20px;background:rgba(104,123,234,0.2);border-radius:20px;font-size:13px;color:var(--accent);font-weight:600;display:none}
+
+/* ===== TOAST ===== */
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:rgba(0,0,0,0.9);color:white;padding:12px 24px;border-radius:50px;font-size:13px;font-weight:600;z-index:200;transition:transform .4s cubic-bezier(.4,0,.2,1);white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.success{border:1px solid var(--success)}
+.toast.error{border:1px solid var(--danger)}
+
+/* ===== MODAL ===== */
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:100;opacity:0;pointer-events:none;transition:opacity .3s;padding:24px}
+.modal-overlay.show{opacity:1;pointer-events:auto}
+.modal{background:linear-gradient(135deg,#1E2A36,#131C25);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);padding:28px;max-width:340px;width:100%;text-align:center;transform:scale(.9);transition:transform .3s}
+.modal-overlay.show .modal{transform:scale(1)}
+.modal h3{font-size:20px;font-weight:800;margin-bottom:8px}
+.modal p{font-size:13px;color:var(--text-secondary);margin-bottom:20px;line-height:1.5}
+.modal .modal-actions{display:flex;gap:10px}
+.modal .modal-actions .btn{flex:1}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{0%{transform:translateX(-100%) rotate(45deg)}100%{transform:translateX(100%) rotate(45deg)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes timerPulse{0%,100%{opacity:1}50%{opacity:.6}}
+@keyframes glowPu{0%,100%{box-shadow:0 0 8px rgba(104,123,234,0.3)}50%{box-shadow:0 0 16px rgba(104,123,234,0.5)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bounceIn{0%{transform:scale(0)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+@keyframes confetti{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(300px) rotate(720deg);opacity:0}}
+.animate-in{animation:slideUp .4s ease forwards}
+.animate-bounce{animation:bounceIn .5s ease forwards}
+
+/* Confetti */
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:95;overflow:hidden}
+.confetti-piece{position:absolute;width:10px;height:10px;top:-10px;animation:confetti 2s ease forwards}
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- SPLASH -->
+  <div id="splash" class="screen">
+    <div class="logo-container">
+      <div class="logo-icon">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="46" cy="46" r="34" stroke="white" stroke-width="9"/><line x1="68" y1="68" x2="92" y2="92" stroke="white" stroke-width="9" stroke-linecap="round"/></svg>
+      </div>
+      <h1>FRANQ QUIZ</h1>
+      <p class="tagline">Acesse. Ofereça. Realize.</p>
+    </div>
+    <div class="loader"><div class="loader-bar" id="splashBar"></div></div>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="login" class="screen hidden">
+    <div class="login-header">
+      <div class="login-logo">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="46" cy="46" r="34" stroke="white" stroke-width="9"/><line x1="68" y1="68" x2="92" y2="92" stroke="white" stroke-width="9" stroke-linecap="round"/></svg>
+      </div>
+      <h2>Bem-vindo!</h2>
+      <p class="login-sub">Entre com suas credenciais Franq Open Bank</p>
+    </div>
+    <div class="input-group">
+      <label>Nome completo</label>
+      <input type="text" id="inputName" placeholder="Seu nome" value="Gustavo Hartmann">
+    </div>
+    <div class="input-group">
+      <label>Cargo</label>
+      <input type="text" id="inputRole" placeholder="Seu cargo" value="Personal Banker">
+    </div>
+    <button class="btn btn-primary btn-block btn-round" onclick="doLogin()" style="margin-top:12px">Entrar</button>
+  </div>
+
+  <!-- HOME -->
+  <div id="home" class="screen hidden">
+    <div class="home-header">
+      <div class="profile-mini">
+        <div class="avatar avatar-sm" style="background:var(--bg-card);display:flex;align-items:center;justify-content:center;font-size:22px" id="homeAvatar">👤</div>
+        <div class="info">
+          <h3 id="homePlayerName">Gustavo</h3>
+          <p id="homePlayerRole">Personal Banker</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" onclick="showScreen('settings')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+        <button class="icon-btn" onclick="showScreen('profile')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Play Actions -->
+    <div class="play-actions">
+      <div class="play-btn primary" onclick="showScreen('topics')">
+        <div class="icon">⚡</div>
+        <div class="label">Jogar</div>
+        <div class="sub">Partida rápida</div>
+      </div>
+      <div class="play-btn secondary" onclick="showChallengeModal()">
+        <div class="icon">🎯</div>
+        <div class="label">Desafiar</div>
+        <div class="sub">Escolha um oponente</div>
+      </div>
+    </div>
+
+    <!-- Challenges -->
+    <div class="challenges-card" id="challengesCard">
+      <div class="challenge-item" onclick="showToast('Nenhum desafio pendente')">
+        <div class="c-icon pending">⚔️</div>
+        <div class="c-info"><strong id="pendingCount">0</strong>Desafios pendentes</div>
+      </div>
+      <div class="challenge-item" onclick="showToast('Nenhum resultado novo')">
+        <div class="c-icon results">📊</div>
+        <div class="c-info"><strong id="resultsCount">0</strong>Resultados novos</div>
+      </div>
+    </div>
+
+    <!-- Topics -->
+    <div class="section-title"><h2>Tópicos</h2><a onclick="showScreen('topics')">Ver todos →</a></div>
+    <div class="topics-scroll" id="topicsScroll"></div>
+
+    <!-- Leaderboard Preview -->
+    <div class="section-title"><h2>Ranking</h2><a onclick="showScreen('leaderboard')">Ver completo →</a></div>
+    <div class="lb-preview" id="lbPreview"></div>
+  </div>
+
+  <!-- TOPICS -->
+  <div id="topics" class="screen hidden">
+    <div class="top-bar">
+      <button class="back-btn" onclick="showScreen('home')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <h2>Escolha um Tópico</h2>
+    </div>
+    <div class="topics-grid" id="topicsGrid"></div>
+  </div>
+
+  <!-- MATCHMAKING -->
+  <div id="matchmaking" class="screen hidden">
+    <div class="match-topic" id="matchTopic"></div>
+    <div class="match-players">
+      <div class="match-player">
+        <div class="mp-avatar" id="matchPlayerAvatar">👤</div>
+        <div class="mp-name" id="matchPlayerName">Gustavo</div>
+        <div class="mp-title" id="matchPlayerTitle">Personal Banker</div>
+      </div>
+      <div class="match-vs">VS</div>
+      <div class="match-player">
+        <div class="mp-avatar" id="matchOpponentAvatar">❓</div>
+        <div class="mp-name" id="matchOpponentName">Jogador Misterioso</div>
+        <div class="mp-title" id="matchOpponentTitle">Procurando...</div>
+      </div>
+    </div>
+    <div class="match-status" id="matchStatus">Buscando oponente<span class="dots">...</span></div>
+    <div class="match-countdown" id="matchCountdown" style="display:none"></div>
+    <button class="btn btn-ghost" onclick="cancelMatch()" id="cancelMatchBtn">Cancelar</button>
+  </div>
+
+  <!-- GAMEPLAY -->
+  <div id="gameplay" class="screen hidden">
+    <div class="game-top">
+      <span class="g-topic" id="gameTopic"></span>
+      <span class="g-round" id="gameRound">Rodada 1/5</span>
+      <button class="g-quit" onclick="showQuitModal()">Sair</button>
+    </div>
+    <div class="game-scores">
+      <div class="g-player">
+        <div class="gp-avatar" id="gamePlayerAvatar">👤</div>
+        <div>
+          <div class="gp-name" id="gamePlayerName">Você</div>
+          <div class="gp-score" id="gamePlayerScore">0</div>
+        </div>
+      </div>
+      <div class="g-player right">
+        <div class="gp-avatar" id="gameOpponentAvatar">🤖</div>
+        <div style="text-align:right">
+          <div class="gp-name" id="gameOpponentName">Oponente</div>
+          <div class="gp-score" id="gameOpponentScore">0</div>
+        </div>
+      </div>
+    </div>
+    <div class="score-bar"><div class="sb-left" id="scoreBarLeft" style="width:50%"></div><div class="sb-right" id="scoreBarRight" style="width:50%"></div></div>
+    <div class="timer-container">
+      <div class="timer-bar"><div class="timer-fill safe" id="timerFill" style="width:100%"></div></div>
+      <div class="timer-label" id="timerLabel">10</div>
+    </div>
+    <div class="coins-display">🪙 <span id="gameCoins">0</span> moedas</div>
+    <div class="question-area">
+      <div class="question-text" id="questionText"></div>
+      <div class="answers-grid" id="answersGrid"></div>
+    </div>
+    <div class="powerups-bar" id="powerupsBar"></div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results" class="screen hidden">
+    <div class="result-banner" id="resultBanner"></div>
+    <div class="result-players" id="resultPlayers"></div>
+    <div class="result-rewards" id="resultRewards"></div>
+    <div class="result-level" id="resultLevel"></div>
+    <div class="result-actions" id="resultActions"></div>
+  </div>
+
+  <!-- LEADERBOARD -->
+  <div id="leaderboard" class="screen hidden">
+    <div class="top-bar">
+      <button class="back-btn" onclick="showScreen('home')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <h2>Ranking</h2>
+    </div>
+    <div class="lb-tabs" id="lbTabs"></div>
+    <div class="lb-full-list" id="lbFullList"></div>
+  </div>
+
+  <!-- PROFILE -->
+  <div id="profile" class="screen hidden">
+    <div class="top-bar">
+      <button class="back-btn" onclick="showScreen('home')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <h2>Meu Perfil</h2>
+    </div>
+    <div class="profile-header" id="profileHeader"></div>
+    <div class="profile-stats" id="profileStats"></div>
+    <div class="section-title"><h2>Medalhas</h2></div>
+    <div class="profile-medals" id="profileMedals"></div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div id="settings" class="screen hidden">
+    <div class="top-bar">
+      <button class="back-btn" onclick="showScreen('home')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <h2>Configurações</h2>
+    </div>
+    <div class="settings-list" id="settingsList"></div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav" id="bottomNav" style="display:none">
+    <button class="nav-item active" data-screen="home" onclick="navTo('home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Início
+    </button>
+    <button class="nav-item" data-screen="topics" onclick="navTo('topics')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Tópicos
+    </button>
+    <button class="nav-item" data-screen="leaderboard" onclick="navTo('leaderboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      Ranking
+    </button>
+    <button class="nav-item" data-screen="profile" onclick="navTo('profile')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Perfil
+    </button>
+  </nav>
+
+  <!-- Round Overlay -->
+  <div class="round-overlay" id="roundOverlay">
+    <div class="ro-round" id="roRound">RODADA</div>
+    <div class="ro-num" id="roNum">1</div>
+    <div class="ro-powerup" id="roPowerup">🔥 Pontos em dobro nesta rodada!</div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modalContent"></div>
+  </div>
+
+  <!-- Confetti -->
+  <div class="confetti-container" id="confettiContainer"></div>
+</div>
+
+<script>
+// ======================== GAME STATE ========================
+const STATE = {
+  player: { name:'Gustavo Hartmann', role:'Personal Banker', avatar:'👤', coins:50, totalPoints:0, level:1, xp:0, xpNext:100, gamesPlayed:0, wins:0, draws:0, losses:0, medals:[] },
+  settings: { music:true, sfx:true, vibration:true, notifications:true, privacy:false },
+  currentScreen:'splash',
+  currentTopic:null,
+  game: null,
+  leaderboardTab:'geral'
+};
+
+// ======================== TOPICS & QUESTIONS ========================
+const TOPICS = [
+  { id:'mercado', name:'Mercado Financeiro', icon:'📈', color:'#687BEA', hot:true },
+  { id:'investimentos', name:'Produtos de Investimento', icon:'💰', color:'#4552A0' },
+  { id:'compliance', name:'Compliance & Regulação', icon:'⚖️', color:'#3B82F6' },
+  { id:'atendimento', name:'Atendimento ao Cliente', icon:'🤝', color:'#10B981' },
+  { id:'cambio', name:'Câmbio & Internacional', icon:'🌍', color:'#8290EF' },
+  { id:'previdencia', name:'Previdência Privada', icon:'🏦', color:'#6366F1' },
+  { id:'rendafixa', name:'Renda Fixa', icon:'📊', color:'#14B8A6' },
+  { id:'rendavariavel', name:'Renda Variável', icon:'📉', color:'#2E3944' }
+];
+
+const QUESTIONS = {
+  mercado: [
+    {q:'Qual índice é o principal termômetro da Bolsa de Valores brasileira?',a:['Ibovespa','S&P 500','Dow Jones','IFIX'],c:0},
+    {q:'O que significa a sigla CDI?',a:['Certificado de Depósito Interbancário','Crédito Direto ao Investidor','Custo de Dívida Interna','Central de Dados de Investimento'],c:0},
+    {q:'Qual órgão regula o mercado de valores mobiliários no Brasil?',a:['CVM','Banco Central','ANBIMA','B3'],c:0},
+    {q:'O que é o spread bancário?',a:['Diferença entre taxa de captação e empréstimo','Taxa de administração de fundos','Imposto sobre operações financeiras','Margem de lucro em câmbio'],c:0},
+    {q:'Qual taxa é definida pelo COPOM a cada 45 dias?',a:['Taxa Selic','Taxa CDI','Taxa TR','Taxa DI'],c:0},
+    {q:'O que representa o índice IFIX?',a:['Fundos Imobiliários','Inflação','Fundos de Investimento','Índice Fiscal'],c:0},
+    {q:'Qual a função principal do Banco Central do Brasil?',a:['Garantir estabilidade do poder de compra da moeda','Definir políticas fiscais','Regular o mercado de ações','Administrar a B3'],c:0},
+    {q:'O que é marcação a mercado?',a:['Atualizar o valor do ativo pelo preço atual','Registrar a compra de uma ação','Definir o preço de IPO','Calcular o lucro de um fundo'],c:0},
+    {q:'O que é um IPO?',a:['Oferta Pública Inicial de ações','Índice de Preços ao Operador','Imposto Proporcional às Operações','Investimento Privado Organizado'],c:0},
+    {q:'Qual a principal diferença entre mercado primário e secundário?',a:['Primário: emissão nova; Secundário: negociação entre investidores','Primário: renda fixa; Secundário: renda variável','Primário: grandes valores; Secundário: pequenos valores','Primário: nacional; Secundário: internacional'],c:0}
+  ],
+  investimentos: [
+    {q:'Qual é a principal característica de um CDB?',a:['Título de renda fixa emitido por bancos','Ação de empresa listada','Fundo de investimento multimercado','Título público federal'],c:0},
+    {q:'O que é o FGC e qual seu limite de cobertura por CPF/instituição?',a:['Fundo Garantidor de Créditos - R$ 250 mil','Fundo Geral de Compensação - R$ 500 mil','Fundo de Garantia do Contribuinte - R$ 100 mil','Fundo Garantidor Compensatório - R$ 1 milhão'],c:0},
+    {q:'Qual a diferença entre LCI e LCA?',a:['LCI: lastro imobiliário; LCA: lastro agrícola','LCI: isenta de IR; LCA: paga IR','LCI: para PJ; LCA: para PF','LCI: longo prazo; LCA: curto prazo'],c:0},
+    {q:'O que é um fundo multimercado?',a:['Fundo que investe em diversas classes de ativos','Fundo exclusivo de ações','Fundo que só investe em renda fixa','Fundo de previdência privada'],c:0},
+    {q:'Qual a vantagem tributária de LCI e LCA para pessoa física?',a:['Isenção de Imposto de Renda','Isenção de IOF','Alíquota reduzida de IR','Cashback do imposto pago'],c:0},
+    {q:'O que são debêntures?',a:['Títulos de dívida emitidos por empresas','Ações preferenciais de bancos','Contratos futuros de commodities','Títulos públicos municipais'],c:0},
+    {q:'Qual tipo de fundo é obrigado a investir pelo menos 67% em ações?',a:['Fundo de Ações','Fundo Multimercado','Fundo de Renda Fixa','Fundo Cambial'],c:0},
+    {q:'O que é come-cotas?',a:['Antecipação semestral de IR em fundos','Taxa de administração','Taxa de performance','Imposto sobre dividendos'],c:0},
+    {q:'Qual título público é indexado à inflação?',a:['Tesouro IPCA+','Tesouro Selic','Tesouro Prefixado','Tesouro Cambial'],c:0},
+    {q:'O que é o prazo de carência em um investimento?',a:['Período mínimo antes de permitir resgate','Prazo para pagamento de taxas','Tempo para liquidação do ativo','Prazo de validade do investimento'],c:0}
+  ],
+  compliance: [
+    {q:'O que significa KYC no contexto bancário?',a:['Know Your Customer','Keep Your Cash','Key Yield Certificate','Know Your Capital'],c:0},
+    {q:'Qual lei brasileira trata sobre lavagem de dinheiro?',a:['Lei 9.613/1998','Lei 6.404/1976','Lei 4.595/1964','Lei 10.406/2002'],c:0},
+    {q:'O que é PLD no contexto bancário?',a:['Prevenção à Lavagem de Dinheiro','Programa de Liquidez Diária','Plano de Desenvolvimento Local','Política de Limites e Depósitos'],c:0},
+    {q:'Qual órgão é responsável pelo COAF?',a:['Banco Central do Brasil','CVM','Receita Federal','Polícia Federal'],c:0},
+    {q:'O que é suitability?',a:['Avaliação de adequação do produto ao perfil do investidor','Liquidez de um ativo','Risco de crédito de uma operação','Rentabilidade esperada de um investimento'],c:0},
+    {q:'A partir de qual valor uma operação em espécie deve ser reportada ao COAF?',a:['R$ 50.000','R$ 10.000','R$ 100.000','R$ 25.000'],c:0},
+    {q:'O que é a LGPD?',a:['Lei Geral de Proteção de Dados','Lei de Garantias e Proteções ao Depositante','Lei Geral de Prevenção de Danos','Legislação de Gestão de Patrimônio Digital'],c:0},
+    {q:'O que é o perfil de investidor "conservador"?',a:['Prioriza segurança e baixo risco','Aceita alto risco por maiores retornos','Investe somente em ações','Não se importa com liquidez'],c:0},
+    {q:'O que é API (Análise de Perfil do Investidor)?',a:['Questionário para identificar perfil de risco do cliente','Interface de programação para sistemas bancários','Análise de Performance de Investimentos','Avaliação de Produtos e Indexadores'],c:0},
+    {q:'Qual o prazo para comunicação de operações suspeitas ao COAF?',a:['Até 24 horas após a conclusão da operação','Até 48 horas','Até 5 dias úteis','Até 30 dias'],c:0}
+  ],
+  atendimento: [
+    {q:'Qual a primeira etapa do atendimento consultivo ao cliente?',a:['Entender as necessidades e objetivos do cliente','Apresentar os produtos disponíveis','Fechar a venda imediatamente','Enviar uma proposta por email'],c:0},
+    {q:'O que é cross-selling no atendimento bancário?',a:['Oferecer produtos complementares ao cliente','Vender produtos de outros bancos','Transferir o cliente para outro atendente','Cancelar produtos não utilizados'],c:0},
+    {q:'Qual a importância do rapport no atendimento?',a:['Criar conexão e confiança com o cliente','Acelerar o processo de venda','Reduzir o tempo de atendimento','Simplificar a documentação'],c:0},
+    {q:'O que é NPS (Net Promoter Score)?',a:['Métrica de satisfação e lealdade do cliente','Novo Programa de Serviços','Nota de Performance do Sistema','Nível de Produtividade de Serviços'],c:0},
+    {q:'Qual a melhor prática ao lidar com uma reclamação de cliente?',a:['Ouvir atentamente, demonstrar empatia e buscar solução','Transferir imediatamente para o gerente','Oferecer desconto para compensar','Explicar que a culpa não é do banco'],c:0},
+    {q:'O que significa "jornada do cliente"?',a:['Todas as interações do cliente com a instituição','O caminho físico do cliente na agência','O histórico de investimentos do cliente','O processo de abertura de conta'],c:0},
+    {q:'Qual técnica de venda envolve fazer perguntas para entender a dor do cliente?',a:['SPIN Selling','Cold Calling','Hard Selling','Flash Sale'],c:0},
+    {q:'O que é up-selling?',a:['Oferecer uma versão superior do produto ao cliente','Vender para novos clientes','Reduzir o preço para fechar a venda','Oferecer produtos de terceiros'],c:0},
+    {q:'Qual canal de atendimento tem crescido mais nos últimos anos?',a:['Digital (app e internet banking)','Atendimento telefônico','Agência física','Correspondente bancário'],c:0},
+    {q:'O que é CRM no contexto bancário?',a:['Customer Relationship Management','Central de Registro Monetário','Controle de Risco de Mercado','Certificado de Rentabilidade Mensal'],c:0}
+  ],
+  cambio: [
+    {q:'O que é a taxa PTAX?',a:['Média das cotações de câmbio do dia calculada pelo BC','Taxa de juros para operações internacionais','Imposto sobre transferências internacionais','Preço de transferência entre bancos'],c:0},
+    {q:'Qual a diferença entre câmbio comercial e câmbio turismo?',a:['Comercial: operações de comércio exterior; Turismo: compra/venda de moeda para viagens','Comercial: dólar americano; Turismo: euro','Comercial: grandes volumes; Turismo: isenção de IOF','Não há diferença'],c:0},
+    {q:'O que é IOF em operações de câmbio?',a:['Imposto sobre Operações Financeiras','Índice de Operações Futuras','Instrução Operacional Financeira','Imposto Obrigatório Federal'],c:0},
+    {q:'O que é um hedge cambial?',a:['Proteção contra variação cambial','Investimento em moeda estrangeira','Empréstimo internacional','Arbitragem de moedas'],c:0},
+    {q:'Qual o limite para envio de remessas sem necessidade de contrato de câmbio formal?',a:['Até USD 3.000 por operação','Até USD 1.000 por operação','Até USD 10.000 por operação','Sem limite'],c:0},
+    {q:'O que é SWIFT no contexto de câmbio?',a:['Sistema de mensagens para transferências bancárias internacionais','Taxa cobrada em operações cambiais','Índice de conversão de moedas','Sistema de câmbio do Banco Central'],c:0},
+    {q:'O que significa ACC (Adiantamento sobre Contrato de Câmbio)?',a:['Financiamento antecipado de exportação','Antecipação de câmbio para importação','Operação de proteção cambial','Adiantamento de lucros em moeda estrangeira'],c:0},
+    {q:'Qual a alíquota de IOF para compra de moeda estrangeira em espécie?',a:['1,1%','6,38%','0,38%','3,5%'],c:0},
+    {q:'O que é câmbio pronto (spot)?',a:['Operação com liquidação em até 2 dias úteis','Operação com liquidação futura','Operação com taxa fixa','Operação sem IOF'],c:0},
+    {q:'O que é o mercado de câmbio futuro?',a:['Mercado onde se negocia a compra/venda de moeda para data futura','Mercado de criptomoedas','Mercado de câmbio paralelo','Mercado de moedas digitais do BC'],c:0}
+  ],
+  previdencia: [
+    {q:'Qual a diferença entre PGBL e VGBL?',a:['PGBL deduz do IR; VGBL tributa só o rendimento','PGBL é para PJ; VGBL é para PF','PGBL tem maior rentabilidade','Não há diferença tributária'],c:0},
+    {q:'Para quem o PGBL é mais indicado?',a:['Quem faz declaração completa do IR','Quem faz declaração simplificada','Quem é isento de IR','Todos os investidores igualmente'],c:0},
+    {q:'O que é tabela regressiva de IR em previdência?',a:['Alíquota diminui com o tempo de aplicação','Alíquota aumenta com o valor investido','Alíquota fixa de 15%','Alíquota definida pelo INSS'],c:0},
+    {q:'Qual o limite de dedução do PGBL no Imposto de Renda?',a:['Até 12% da renda bruta anual','Até 20% da renda bruta anual','Até R$ 50.000 por ano','Sem limite'],c:0},
+    {q:'O que é portabilidade em previdência privada?',a:['Transferir o plano para outra instituição sem resgate','Resgatar e reinvestir em outro banco','Mudar de PGBL para VGBL','Alterar o perfil de risco do plano'],c:0},
+    {q:'Qual a menor alíquota na tabela regressiva?',a:['10% após 10 anos','15% após 8 anos','20% após 6 anos','0% após 12 anos'],c:0},
+    {q:'O que é período de diferimento na previdência?',a:['Fase de acumulação antes da aposentadoria','Prazo de carência para resgate','Período sem cobrança de taxas','Fase de recebimento do benefício'],c:0},
+    {q:'Quais taxas são comuns em planos de previdência?',a:['Taxa de administração e taxa de carregamento','Taxa de custódia e corretagem','Taxa de performance e taxa SELIC','Taxa única de adesão'],c:0},
+    {q:'O que é a fase de benefício na previdência?',a:['Quando o participante começa a receber a renda','Quando o participante faz aportes','Quando o plano atinge a rentabilidade alvo','Quando o imposto é reduzido'],c:0},
+    {q:'Em caso de falecimento, o VGBL entra em inventário?',a:['Não, o VGBL não entra em inventário','Sim, sempre entra em inventário','Depende do valor acumulado','Depende da idade do titular'],c:0}
+  ],
+  rendafixa: [
+    {q:'O que caracteriza um investimento de renda fixa?',a:['Regras de remuneração definidas no momento da aplicação','Rendimento atrelado à bolsa de valores','Garantia de rentabilidade acima da inflação','Isenção total de impostos'],c:0},
+    {q:'Qual a diferença entre títulos prefixados e pós-fixados?',a:['Prefixado: taxa definida; Pós-fixado: atrelado a indexador','Prefixado: mais arriscado; Pós-fixado: sem risco','Prefixado: longo prazo; Pós-fixado: curto prazo','Não há diferença prática'],c:0},
+    {q:'O que é duration em renda fixa?',a:['Prazo médio ponderado dos fluxos de caixa do título','Prazo de vencimento do título','Tempo mínimo para resgate','Período de carência'],c:0},
+    {q:'Qual o risco principal de um título prefixado?',a:['Risco de mercado (variação das taxas de juros)','Risco de crédito','Risco de liquidez','Risco cambial'],c:0},
+    {q:'O que é Tesouro Selic?',a:['Título público pós-fixado atrelado à taxa Selic','Título privado emitido pelo Banco Central','Fundo de investimento do governo','CDB do Tesouro Nacional'],c:0},
+    {q:'Qual a tabela regressiva de IR para renda fixa?',a:['22,5% até 180 dias; 15% acima de 720 dias','25% até 365 dias; 10% acima de 720 dias','20% fixo independente do prazo','15% fixo independente do prazo'],c:0},
+    {q:'O que é CRI (Certificado de Recebíveis Imobiliários)?',a:['Título de renda fixa lastreado em créditos imobiliários','Certificado de registro de imóvel','Contrato de renda de imóvel','Crédito rotativo imobiliário'],c:0},
+    {q:'O que acontece quando há marcação a mercado negativa em renda fixa?',a:['O preço do título cai, gerando perda se vendido antes do vencimento','O título é automaticamente resgatado','O investidor recebe menos juros','O FGC cobre a diferença'],c:0},
+    {q:'O que é risco de crédito em renda fixa?',a:['Risco do emissor não honrar o pagamento','Risco de variação de preço do título','Risco de inflação corroer o rendimento','Risco de não conseguir vender o título'],c:0},
+    {q:'Qual título é ideal para reserva de emergência?',a:['Tesouro Selic','Tesouro IPCA+ 2035','CDB de 5 anos','Debênture de infraestrutura'],c:0}
+  ],
+  rendavariavel: [
+    {q:'O que é uma ação ordinária (ON)?',a:['Ação que dá direito a voto nas assembleias','Ação que paga mais dividendos','Ação sem risco de mercado','Ação emitida pelo governo'],c:0},
+    {q:'O que são dividendos?',a:['Parte do lucro distribuída aos acionistas','Taxas cobradas pela corretora','Juros pagos sobre títulos públicos','Bônus de IPO'],c:0},
+    {q:'O que é um FII (Fundo de Investimento Imobiliário)?',a:['Fundo que investe em ativos imobiliários','Financiamento de imóvel individual','Fundo de infraestrutura industrial','Fórum de investidores imobiliários'],c:0},
+    {q:'O que significa operar "vendido" ou short selling?',a:['Vender ativo que não possui apostando na queda','Vender ações com desconto','Encerrar posição em um fundo','Vender apenas ações preferenciais'],c:0},
+    {q:'Qual a diferença entre análise técnica e análise fundamentalista?',a:['Técnica: gráficos e padrões; Fundamentalista: indicadores financeiros','Técnica: longo prazo; Fundamentalista: curto prazo','Técnica: renda fixa; Fundamentalista: renda variável','Não há diferença prática'],c:0},
+    {q:'O que é o índice P/L (Preço/Lucro)?',a:['Relação entre preço da ação e lucro por ação','Preço do lote de ações','Proporção de liquidez do ativo','Percentual de lucratividade anual'],c:0},
+    {q:'O que são ETFs?',a:['Fundos que replicam índices negociados em bolsa','Empréstimos de títulos fiscais','Estratégias de trading financeiro','Empresas de tecnologia financeira'],c:0},
+    {q:'Qual a tributação padrão sobre ganho de capital em ações (operações comuns)?',a:['15% sobre o lucro','20% sobre o lucro','10% sobre o lucro','Isento de imposto'],c:0},
+    {q:'O que é o circuit breaker na bolsa?',a:['Paralisação das negociações após queda acentuada','Momento de abertura do pregão','Sistema de proteção contra hackers','Limite de compras por investidor'],c:0},
+    {q:'O que é tag along?',a:['Direito dos minoritários em caso de venda do controle','Taxa de saída de um fundo','Identificação de ações por código','Bônus por tempo de investimento'],c:0}
+  ]
+};
+
+// ======================== AI OPPONENTS ========================
+const OPPONENTS = [
+  {name:'Ana Oliveira',role:'Personal Banker',avatar:'👩‍💼'},
+  {name:'Carlos Silva',role:'Gerente de Agência',avatar:'👨‍💼'},
+  {name:'Mariana Santos',role:'Analista de Investimentos',avatar:'👩‍💻'},
+  {name:'Rafael Costa',role:'Assessor Financeiro',avatar:'🧑‍💼'},
+  {name:'Juliana Lima',role:'Personal Banker',avatar:'👩‍🦰'},
+  {name:'Pedro Almeida',role:'Gerente de Carteira',avatar:'👨‍🦱'},
+  {name:'Fernanda Rocha',role:'Especialista Private',avatar:'👩‍🏫'},
+  {name:'Lucas Mendes',role:'Personal Banker',avatar:'👨‍💻'},
+  {name:'Beatriz Ferreira',role:'Analista de Compliance',avatar:'👩‍⚖️'},
+  {name:'Thiago Souza',role:'Consultor de Câmbio',avatar:'🧑‍✈️'}
+];
+
+const LEADERBOARD_DATA = [];
+function generateLeaderboard(){
+  LEADERBOARD_DATA.length=0;
+  const names = ['Ana Oliveira','Carlos Silva','Mariana Santos','Rafael Costa','Juliana Lima','Pedro Almeida','Fernanda Rocha','Lucas Mendes','Beatriz Ferreira','Thiago Souza','Camila Araújo','Diego Martins','Patrícia Gomes','Bruno Ribeiro','Isabela Dias','Vinícius Moreira','Larissa Castro','Gabriel Nunes','Amanda Barbosa','Eduardo Cardoso'];
+  const roles = ['Personal Banker','Gerente de Agência','Analista de Investimentos','Assessor Financeiro','Especialista Private','Gerente de Carteira','Consultor de Câmbio','Analista de Compliance'];
+  const avatars = ['👩‍💼','👨‍💼','👩‍💻','🧑‍💼','👩‍🦰','👨‍🦱','👩‍🏫','👨‍💻','👩‍⚖️','🧑‍✈️','👩','👨','👩‍🎓','👨‍🎓','👩‍💻','👨‍💻','👩‍🔬','👨‍🔬','👩‍🎨','👨‍🎨'];
+  for(let i=0;i<20;i++){
+    LEADERBOARD_DATA.push({name:names[i],role:roles[i%roles.length],avatar:avatars[i],points:Math.floor(2000-i*80+Math.random()*40)});
+  }
+  // Insert player
+  const pIdx = Math.min(Math.max(3,Math.floor(20-STATE.player.totalPoints/100)),19);
+  LEADERBOARD_DATA.splice(pIdx,0,{name:STATE.player.name,role:STATE.player.role,avatar:STATE.player.avatar,points:STATE.player.totalPoints,isPlayer:true});
+  LEADERBOARD_DATA.length=20;
+  LEADERBOARD_DATA.sort((a,b)=>b.points-a.points);
+}
+
+// ======================== AUDIO ENGINE ========================
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+function ensureAudio(){if(!audioCtx)audioCtx=new AudioCtx()}
+function playTone(freq,dur,type='sine',vol=0.15){
+  if(!STATE.settings.sfx)return;
+  ensureAudio();
+  const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+  o.type=type;o.frequency.value=freq;g.gain.value=vol;
+  o.connect(g);g.connect(audioCtx.destination);
+  o.start();g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+dur);
+  o.stop(audioCtx.currentTime+dur);
+}
+function sfxClick(){playTone(800,.08,'sine',.1)}
+function sfxCorrect(){playTone(523,.1);setTimeout(()=>playTone(659,.1),100);setTimeout(()=>playTone(784,.15),200)}
+function sfxWrong(){playTone(200,.3,'sawtooth',.1)}
+function sfxCountdown(){playTone(440,.15,'sine',.12)}
+function sfxWin(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>playTone(f,.2,'sine',.12),i*150))}
+function sfxLose(){playTone(300,.4,'sawtooth',.08);setTimeout(()=>playTone(250,.5,'sawtooth',.08),200)}
+function sfxPowerup(){playTone(440,.1);setTimeout(()=>playTone(660,.1),80);setTimeout(()=>playTone(880,.15),160)}
+function sfxTimeWarning(){playTone(600,.08,'square',.08)}
+function vibrate(ms){if(STATE.settings.vibration&&navigator.vibrate)navigator.vibrate(ms)}
+
+// ======================== NAVIGATION ========================
+let prevScreen = 'home';
+function showScreen(id){
+  const screens = document.querySelectorAll('.screen');
+  const current = document.getElementById(STATE.currentScreen);
+  const next = document.getElementById(id);
+  if(!next||id===STATE.currentScreen)return;
+  sfxClick();
+  screens.forEach(s=>{if(s.id!==id&&s.id!==STATE.currentScreen)s.classList.add('hidden')});
+  if(current){current.classList.add('slide-left');current.classList.remove('hidden')}
+  next.classList.remove('hidden','slide-left');
+  setTimeout(()=>{if(current)current.classList.add('hidden');current?.classList.remove('slide-left')},400);
+  prevScreen=STATE.currentScreen;
+  STATE.currentScreen=id;
+  const navScreens=['home','topics','leaderboard','profile'];
+  const bn=document.getElementById('bottomNav');
+  bn.style.display=navScreens.includes(id)?'flex':'none';
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.screen===id));
+  if(id==='home')renderHome();
+  if(id==='topics')renderTopics();
+  if(id==='leaderboard')renderLeaderboard();
+  if(id==='profile')renderProfile();
+  if(id==='settings')renderSettings();
+}
+function navTo(id){showScreen(id)}
+
+// ======================== SPLASH & LOGIN ========================
+function runSplash(){
+  let p=0;const bar=document.getElementById('splashBar');
+  const iv=setInterval(()=>{p+=2;bar.style.width=p+'%';if(p>=100){clearInterval(iv);setTimeout(()=>showScreen('login'),300)}},30);
+}
+
+function doLogin(){
+  const n=document.getElementById('inputName').value.trim();
+  const r=document.getElementById('inputRole').value.trim();
+  if(!n){showToast('Digite seu nome','error');return}
+  STATE.player.name=n;STATE.player.role=r||'Personal Banker';
+  sfxClick();vibrate(50);
+  generateLeaderboard();
+  showScreen('home');
+}
+
+// ======================== HOME ========================
+function renderHome(){
+  document.getElementById('homePlayerName').textContent=STATE.player.name.split(' ')[0];
+  document.getElementById('homePlayerRole').textContent=STATE.player.role;
+  // Topics scroll
+  const ts=document.getElementById('topicsScroll');
+  const hotTopic=TOPICS.find(t=>t.hot);
+  const others=TOPICS.filter(t=>!t.hot).sort(()=>Math.random()-.5).slice(0,3);
+  const shown=hotTopic?[hotTopic,...others]:others;
+  ts.innerHTML=shown.map(t=>`
+    <div class="topic-card ${t.hot?'featured':''}" onclick="startGame('${t.id}')">
+      <div class="t-icon">${t.icon}</div>
+      <div class="t-name">${t.name}</div>
+      <div class="t-level">Nível ${STATE.player.level}</div>
+      ${t.hot?'<div class="t-double">2x PONTOS</div>':''}
+    </div>
+  `).join('');
+  // Leaderboard preview
+  generateLeaderboard();
+  const lb=document.getElementById('lbPreview');
+  const top3=LEADERBOARD_DATA.slice(0,3);
+  lb.innerHTML=`
+    <div class="lb-header"><h3>Ranking Geral</h3><div class="lb-timer">Reseta em 5d 12h</div></div>
+    ${top3.map((e,i)=>`
+      <div class="lb-entry">
+        <div class="lb-rank ${['gold','silver','bronze'][i]}">${['🥇','🥈','🥉'][i]}</div>
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--bg-card);display:flex;align-items:center;justify-content:center;font-size:16px">${e.avatar}</div>
+        <div class="info"><div class="name">${e.name}</div><div class="title">${e.role}</div></div>
+        <div class="points">${e.points.toLocaleString()}</div>
+      </div>
+    `).join('')}
+  `;
+}
+
+// ======================== TOPICS ========================
+function renderTopics(){
+  const g=document.getElementById('topicsGrid');
+  g.innerHTML=TOPICS.map(t=>`
+    <div class="topic-tile ${t.hot?'hot':''}" onclick="startGame('${t.id}')" style="--tc:${t.color}">
+      <div class="tile-icon">${t.icon}</div>
+      <div class="tile-name">${t.name}</div>
+      <div class="tile-level">Nível ${STATE.player.level}</div>
+      <div class="tile-rank">#${Math.floor(Math.random()*50+1)} no ranking</div>
+    </div>
+  `).join('');
+}
+
+// ======================== MATCHMAKING ========================
+let matchTimeout;
+function startGame(topicId){
+  STATE.currentTopic=TOPICS.find(t=>t.id===topicId);
+  if(!STATE.currentTopic)return;
+  showScreen('matchmaking');
+  const opp=OPPONENTS[Math.floor(Math.random()*OPPONENTS.length)];
+  document.getElementById('matchTopic').textContent=STATE.currentTopic.name;
+  document.getElementById('matchPlayerName').textContent=STATE.player.name.split(' ')[0];
+  document.getElementById('matchPlayerTitle').textContent=STATE.player.role;
+  document.getElementById('matchOpponentName').textContent='Jogador Misterioso';
+  document.getElementById('matchOpponentAvatar').textContent='❓';
+  document.getElementById('matchOpponentTitle').textContent='Procurando...';
+  document.getElementById('matchStatus').innerHTML='Buscando oponente<span class="dots">...</span>';
+  document.getElementById('matchCountdown').style.display='none';
+  document.getElementById('cancelMatchBtn').style.display='block';
+  // Find opponent after delay
+  matchTimeout=setTimeout(()=>{
+    document.getElementById('matchOpponentName').textContent=opp.name;
+    document.getElementById('matchOpponentAvatar').textContent=opp.avatar;
+    document.getElementById('matchOpponentTitle').textContent=opp.role;
+    document.getElementById('matchStatus').textContent='Oponente encontrado!';
+    sfxClick();vibrate(100);
+    // Countdown
+    let c=3;
+    document.getElementById('matchCountdown').style.display='block';
+    document.getElementById('matchCountdown').textContent=c;
+    document.getElementById('cancelMatchBtn').style.display='none';
+    const ci=setInterval(()=>{
+      c--;sfxCountdown();
+      if(c<=0){clearInterval(ci);beginMatch(topicId,opp)}
+      else document.getElementById('matchCountdown').textContent=c;
+    },1000);
+  },2000);
+}
+function cancelMatch(){clearTimeout(matchTimeout);showScreen('home');showToast('Partida cancelada')}
+
+// ======================== GAMEPLAY ========================
+function beginMatch(topicId,opponent){
+  const qs=QUESTIONS[topicId];
+  if(!qs||qs.length<5){showToast('Tópico sem perguntas','error');showScreen('home');return}
+  // Pick 5 random questions
+  const shuffled=[...qs].sort(()=>Math.random()-.5).slice(0,5);
+  STATE.game={
+    topicId, opponent, questions:shuffled, current:0,
+    playerScore:0, opponentScore:0, playerCoins:STATE.player.coins,
+    timer:null, timeLeft:10, answered:false,
+    powerups:{time:false,fifty:false,double:false},
+    doubleActive:false, isLastQ:false,
+    results:[]
+  };
+  showScreen('gameplay');
+  document.getElementById('gameTopic').textContent=STATE.currentTopic.name;
+  document.getElementById('gamePlayerName').textContent=STATE.player.name.split(' ')[0];
+  document.getElementById('gameOpponentName').textContent=STATE.game.opponent.name.split(' ')[0];
+  document.getElementById('gameOpponentAvatar').textContent=STATE.game.opponent.avatar;
+  document.getElementById('gameCoins').textContent=STATE.game.playerCoins;
+  renderPowerups();
+  showRoundOverlay(1);
+}
+
+function showRoundOverlay(num){
+  const ov=document.getElementById('roundOverlay');
+  document.getElementById('roRound').textContent='RODADA';
+  document.getElementById('roNum').textContent=num;
+  const pu=document.getElementById('roPowerup');
+  if(num===5){pu.style.display='block';pu.textContent='🔥 Pontos em dobro automático!'}
+  else pu.style.display='none';
+  ov.classList.add('show');
+  sfxCountdown();
+  setTimeout(()=>{ov.classList.remove('show');showQuestion()},1500);
+}
+
+function showQuestion(){
+  const g=STATE.game;
+  const q=g.questions[g.current];
+  g.isLastQ=(g.current===4);
+  g.doubleActive=g.isLastQ;
+  g.answered=false;
+  g.timeLeft=10;
+  document.getElementById('gameRound').textContent=`Rodada ${g.current+1}/5`;
+  document.getElementById('questionText').textContent=q.q;
+  document.getElementById('gamePlayerScore').textContent=g.playerScore;
+  document.getElementById('gameOpponentScore').textContent=g.opponentScore;
+  updateScoreClasses();
+  // Answers
+  const letters=['A','B','C','D'];
+  const ag=document.getElementById('answersGrid');
+  ag.innerHTML=q.a.map((a,i)=>`
+    <button class="answer-btn" onclick="selectAnswer(${i})" id="ans${i}">
+      <span class="a-letter">${letters[i]}</span>
+      <span>${a}</span>
+    </button>
+  `).join('');
+  // Timer
+  updateTimer();
+  g.timer=setInterval(()=>{
+    g.timeLeft-=0.1;
+    if(g.timeLeft<=3&&g.timeLeft>2.9)sfxTimeWarning();
+    if(g.timeLeft<=0){g.timeLeft=0;clearInterval(g.timer);if(!g.answered)timeUp()}
+    updateTimer();
+  },100);
+  renderPowerups();
+}
+
+function updateTimer(){
+  const g=STATE.game;
+  const pct=(g.timeLeft/10)*100;
+  const fill=document.getElementById('timerFill');
+  fill.style.width=pct+'%';
+  fill.className='timer-fill '+(pct>50?'safe':pct>25?'warning':'danger');
+  document.getElementById('timerLabel').textContent=Math.ceil(g.timeLeft);
+}
+
+function updateScoreClasses(){
+  const g=STATE.game;
+  const ps=document.getElementById('gamePlayerScore');
+  const os=document.getElementById('gameOpponentScore');
+  ps.className='gp-score'+(g.playerScore>g.opponentScore?' winning':g.playerScore<g.opponentScore?' losing':'');
+  os.className='gp-score'+(g.opponentScore>g.playerScore?' winning':g.opponentScore<g.playerScore?' losing':'');
+  const total=Math.max(g.playerScore+g.opponentScore,1);
+  document.getElementById('scoreBarLeft').style.width=(g.playerScore/total*100)+'%';
+  document.getElementById('scoreBarRight').style.width=(g.opponentScore/total*100)+'%';
+}
+
+function selectAnswer(idx){
+  const g=STATE.game;
+  if(g.answered)return;
+  g.answered=true;
+  clearInterval(g.timer);
+  vibrate(30);
+  const q=g.questions[g.current];
+  const correct=idx===q.c;
+  const btn=document.getElementById('ans'+idx);
+  const correctBtn=document.getElementById('ans'+q.c);
+  // Disable all
+  document.querySelectorAll('.answer-btn').forEach(b=>b.classList.add('disabled'));
+  if(correct){
+    btn.classList.add('correct');
+    sfxCorrect();
+    let pts=Math.max(5,Math.round(g.timeLeft*2));
+    if(g.doubleActive||g.powerups.double)pts*=2;
+    g.playerScore+=pts;
+    g.playerCoins+=2;
+    g.results.push({correct:true,pts,time:10-g.timeLeft});
+  } else {
+    btn.classList.add('wrong');
+    correctBtn.classList.add('correct');
+    sfxWrong();vibrate(200);
+    g.results.push({correct:false,pts:0,time:10-g.timeLeft});
+  }
+  // Opponent AI answer
+  const oppCorrect=Math.random()<0.55;
+  if(oppCorrect){
+    const oppPts=Math.floor(Math.random()*15+5);
+    g.opponentScore+=oppPts;
+  }
+  document.getElementById('gamePlayerScore').textContent=g.playerScore;
+  document.getElementById('gameOpponentScore').textContent=g.opponentScore;
+  document.getElementById('gameCoins').textContent=g.playerCoins;
+  updateScoreClasses();
+  // Next
+  setTimeout(()=>{
+    g.current++;
+    if(g.current>=5)endMatch();
+    else showRoundOverlay(g.current+1);
+  },2000);
+}
+
+function timeUp(){
+  const g=STATE.game;
+  g.answered=true;
+  const q=g.questions[g.current];
+  document.querySelectorAll('.answer-btn').forEach(b=>b.classList.add('disabled'));
+  document.getElementById('ans'+q.c).classList.add('correct');
+  sfxWrong();vibrate(200);
+  g.results.push({correct:false,pts:0,time:10});
+  // Opponent
+  if(Math.random()<0.55){g.opponentScore+=Math.floor(Math.random()*15+5)}
+  document.getElementById('gameOpponentScore').textContent=g.opponentScore;
+  updateScoreClasses();
+  setTimeout(()=>{g.current++;if(g.current>=5)endMatch();else showRoundOverlay(g.current+1)},2000);
+}
+
+// ======================== POWERUPS ========================
+function renderPowerups(){
+  const g=STATE.game;if(!g)return;
+  const pus=[
+    {id:'time',icon:'⏱️',name:'Tempo Extra',cost:10},
+    {id:'fifty',icon:'✂️',name:'50/50',cost:15},
+    {id:'double',icon:'2️⃣',name:'Pontos x2',cost:20}
+  ];
+  const bar=document.getElementById('powerupsBar');
+  bar.innerHTML=pus.map(pu=>{
+    const used=g.powerups[pu.id];
+    const locked=g.playerCoins<pu.cost;
+    return `<button class="pu-btn ${used?'used':''} ${locked&&!used?'locked':''}" onclick="usePowerup('${pu.id}',${pu.cost})">
+      <span class="pu-icon">${pu.icon}</span>
+      <span class="pu-cost">${pu.cost} 🪙</span>
+    </button>`;
+  }).join('');
+}
+
+function usePowerup(id,cost){
+  const g=STATE.game;
+  if(!g||g.answered||g.powerups[id]||g.playerCoins<cost)return;
+  g.powerups[id]=true;
+  g.playerCoins-=cost;
+  document.getElementById('gameCoins').textContent=g.playerCoins;
+  sfxPowerup();vibrate(50);
+  if(id==='time'){g.timeLeft=Math.min(g.timeLeft+5,15);updateTimer();showToast('+5 segundos!','success')}
+  if(id==='fifty'){
+    const q=g.questions[g.current];
+    const wrong=q.a.map((_,i)=>i).filter(i=>i!==q.c).sort(()=>Math.random()-.5).slice(0,2);
+    wrong.forEach(i=>document.getElementById('ans'+i)?.classList.add('hidden-5050'));
+    showToast('Duas respostas eliminadas!','success');
+  }
+  if(id==='double'){g.doubleActive=true;showToast('Pontos em dobro ativado!','success')}
+  renderPowerups();
+}
+
+// ======================== MATCH END / RESULTS ========================
+function endMatch(){
+  const g=STATE.game;
+  const correctCount=g.results.filter(r=>r.correct).length;
+  const won=g.playerScore>g.opponentScore;
+  const draw=g.playerScore===g.opponentScore;
+  const perfect=correctCount===5;
+  // Calculate rewards
+  let matchPts=g.playerScore;
+  let finishPts=50;
+  let winPts=won?50:0;
+  let perfectPts=perfect?50:0;
+  let totalPts=matchPts+finishPts+winPts+perfectPts;
+  let matchCoins=correctCount*2;
+  let winCoins=won?5:0;
+  let finishCoins=10;
+  let perfectCoins=perfect?2:0;
+  let totalCoins=matchCoins+winCoins+finishCoins+perfectCoins;
+  // Update state
+  STATE.player.totalPoints+=totalPts;
+  STATE.player.coins=g.playerCoins+totalCoins;
+  STATE.player.xp+=totalPts;
+  STATE.player.gamesPlayed++;
+  if(won)STATE.player.wins++;else if(draw)STATE.player.draws++;else STATE.player.losses++;
+  // Level up
+  while(STATE.player.xp>=STATE.player.xpNext){STATE.player.xp-=STATE.player.xpNext;STATE.player.level++;STATE.player.xpNext=Math.floor(STATE.player.xpNext*1.3);STATE.player.coins+=10}
+  showScreen('results');
+  if(won){sfxWin();spawnConfetti()}else if(draw){sfxClick()}else{sfxLose()}
+  // Render results
+  const rb=document.getElementById('resultBanner');
+  rb.innerHTML=`<h1 class="${won?'win':draw?'draw':'lose'}">${won?'VITÓRIA!':draw?'EMPATE!':'DERROTA'}</h1>`;
+  const rp=document.getElementById('resultPlayers');
+  rp.innerHTML=`
+    <div class="rp ${won?'winner':'loser'}"><div class="rp-avatar" style="font-size:28px;background:var(--bg-card);border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;border:3px solid ${won?'var(--success)':'var(--danger)'}">${STATE.player.avatar}</div><div class="rp-name">${STATE.player.name.split(' ')[0]}</div><div class="rp-score">${g.playerScore}</div></div>
+    <div style="font-size:20px;font-weight:900;color:var(--text-muted);align-self:center">VS</div>
+    <div class="rp ${!won&&!draw?'winner':'loser'}"><div class="rp-avatar" style="font-size:28px;background:var(--bg-card);border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;border:3px solid ${!won&&!draw?'var(--success)':'var(--danger)'}">${g.opponent.avatar}</div><div class="rp-name">${g.opponent.name.split(' ')[0]}</div><div class="rp-score">${g.opponentScore}</div></div>
+  `;
+  document.getElementById('resultRewards').innerHTML=`
+    <div class="reward-row"><span class="rr-label">Respostas corretas</span><span class="rr-value points">+${matchPts} pts</span></div>
+    <div class="reward-row"><span class="rr-label">Completar partida</span><span class="rr-value points">+${finishPts} pts</span></div>
+    ${won?`<div class="reward-row"><span class="rr-label">Bônus de vitória</span><span class="rr-value points">+${winPts} pts</span></div>`:''}
+    ${perfect?`<div class="reward-row"><span class="rr-label">Partida perfeita!</span><span class="rr-value points">+${perfectPts} pts</span></div>`:''}
+    <div class="reward-row" style="margin-top:8px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1)"><span class="rr-label"><strong>Total de pontos</strong></span><span class="rr-value points"><strong>+${totalPts}</strong></span></div>
+    <div class="reward-row"><span class="rr-label"><strong>Moedas ganhas</strong></span><span class="rr-value coins"><strong>+${totalCoins} 🪙</strong></span></div>
+  `;
+  document.getElementById('resultLevel').innerHTML=`
+    <div class="level-info"><span class="lv">Nível <span>${STATE.player.level}</span></span><span class="lv" style="font-size:12px;color:var(--text-muted)">${STATE.player.xp}/${STATE.player.xpNext} XP</span></div>
+    <div class="level-bar"><div class="level-fill" style="width:${(STATE.player.xp/STATE.player.xpNext)*100}%"></div></div>
+  `;
+  document.getElementById('resultActions').innerHTML=`
+    <button class="btn btn-primary btn-round btn-block" onclick="startGame('${g.topicId}')">⚔️ Revanche</button>
+    <button class="btn btn-secondary btn-round btn-block" onclick="showScreen('topics')">📚 Outro Tópico</button>
+    <button class="btn btn-ghost btn-round btn-block" onclick="showScreen('leaderboard')">🏆 Ver Ranking</button>
+    <button class="btn btn-ghost btn-round btn-block" onclick="showScreen('home')">🏠 Início</button>
+  `;
+}
+
+function spawnConfetti(){
+  const c=document.getElementById('confettiContainer');
+  c.innerHTML='';
+  const colors=['#687BEA','#8290EF','#10B981','#4552A0','#3B82F6','#B0BBFF','#FFFFFF'];
+  for(let i=0;i<40;i++){
+    const p=document.createElement('div');
+    p.className='confetti-piece';
+    p.style.left=Math.random()*100+'%';
+    p.style.background=colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDelay=Math.random()*1+'s';
+    p.style.animationDuration=(1.5+Math.random())+'s';
+    p.style.borderRadius=Math.random()>.5?'50%':'2px';
+    p.style.width=(6+Math.random()*8)+'px';
+    p.style.height=(6+Math.random()*8)+'px';
+    c.appendChild(p);
+  }
+  setTimeout(()=>c.innerHTML='',3000);
+}
+
+// ======================== LEADERBOARD ========================
+function renderLeaderboard(){
+  generateLeaderboard();
+  const tabs=document.getElementById('lbTabs');
+  const allTopics=[{id:'geral',name:'Geral'},...TOPICS];
+  tabs.innerHTML=allTopics.map(t=>`<div class="lb-tab ${STATE.leaderboardTab===t.id?'active':''}" onclick="switchLbTab('${t.id}')">${t.id==='geral'?'Geral':t.icon}</div>`).join('');
+  const list=document.getElementById('lbFullList');
+  list.innerHTML=LEADERBOARD_DATA.map((e,i)=>`
+    <div class="lb-full-entry ${e.isPlayer?'me':''}">
+      <div class="rank ${i===0?'r1':i===1?'r2':i===2?'r3':''}">${i<3?['🥇','🥈','🥉'][i]:(i+1)}</div>
+      <div class="av">${e.avatar}</div>
+      <div class="det"><div class="nm">${e.name}${e.isPlayer?' (Você)':''}</div><div class="rl">${e.role}</div></div>
+      <div class="pts">${e.points.toLocaleString()}</div>
+    </div>
+  `).join('');
+}
+function switchLbTab(id){STATE.leaderboardTab=id;sfxClick();renderLeaderboard()}
+
+// ======================== PROFILE ========================
+function renderProfile(){
+  const p=STATE.player;
+  document.getElementById('profileHeader').innerHTML=`
+    <div class="p-avatar">${p.avatar}</div>
+    <h2>${p.name}</h2>
+    <p class="p-role">${p.role} • Nível ${p.level}</p>
+  `;
+  const total=p.wins+p.losses+p.draws||1;
+  document.getElementById('profileStats').innerHTML=`
+    <div class="stat-card"><div class="s-value">${p.gamesPlayed}</div><div class="s-label">Partidas</div></div>
+    <div class="stat-card"><div class="s-value">${Math.round(p.wins/total*100)}%</div><div class="s-label">Vitórias</div></div>
+    <div class="stat-card"><div class="s-value">${p.totalPoints.toLocaleString()}</div><div class="s-label">Pontos</div></div>
+    <div class="stat-card"><div class="s-value">${p.coins}</div><div class="s-label">Moedas</div></div>
+    <div class="stat-card"><div class="s-value">${p.level}</div><div class="s-label">Nível</div></div>
+    <div class="stat-card"><div class="s-value">${p.wins}</div><div class="s-label">Vitórias</div></div>
+  `;
+  const medals=[
+    {icon:'🎯',name:'Primeira Vitória',earned:p.wins>=1},
+    {icon:'🔥',name:'5 Vitórias',earned:p.wins>=5},
+    {icon:'⭐',name:'10 Partidas',earned:p.gamesPlayed>=10},
+    {icon:'💎',name:'500 Pontos',earned:p.totalPoints>=500},
+    {icon:'👑',name:'Nível 5',earned:p.level>=5},
+    {icon:'🏆',name:'Partida Perfeita',earned:false},
+    {icon:'🎖️',name:'Top 3 Ranking',earned:false},
+    {icon:'💰',name:'100 Moedas',earned:p.coins>=100}
+  ];
+  document.getElementById('profileMedals').innerHTML=`<div class="medals-grid">${medals.map(m=>`<div class="medal ${m.earned?'earned':'locked'}" title="${m.name}">${m.icon}</div>`).join('')}</div>`;
+}
+
+// ======================== SETTINGS ========================
+function renderSettings(){
+  const s=STATE.settings;
+  const items=[
+    {icon:'🔊',label:'Efeitos Sonoros',key:'sfx'},
+    {icon:'🎵',label:'Música',key:'music'},
+    {icon:'📳',label:'Vibração',key:'vibration'},
+    {icon:'🔔',label:'Notificações',key:'notifications'},
+    {icon:'🔒',label:'Perfil Privado',key:'privacy'}
+  ];
+  document.getElementById('settingsList').innerHTML=items.map(item=>`
+    <div class="setting-item">
+      <div class="si-left"><span class="si-icon">${item.icon}</span><span class="si-label">${item.label}</span></div>
+      <button class="toggle ${s[item.key]?'on':''}" onclick="toggleSetting('${item.key}',this)"><div class="toggle-dot"></div></button>
+    </div>
+  `).join('')+`
+    <div style="padding:24px 0;display:flex;flex-direction:column;gap:12px">
+      <button class="btn btn-secondary btn-round btn-block" onclick="showToast('Obrigado pelo feedback!')">📝 Enviar Feedback</button>
+      <button class="btn btn-ghost btn-round btn-block" onclick="logout()">Sair da Conta</button>
+    </div>
+  `;
+}
+function toggleSetting(key,el){
+  STATE.settings[key]=!STATE.settings[key];
+  el.classList.toggle('on');
+  sfxClick();vibrate(20);
+}
+function logout(){STATE.currentScreen='splash';showScreen('login')}
+
+// ======================== MODALS ========================
+function showModal(html){
+  document.getElementById('modalContent').innerHTML=html;
+  document.getElementById('modalOverlay').classList.add('show');
+}
+function hideModal(){document.getElementById('modalOverlay').classList.remove('show')}
+function showQuitModal(){
+  showModal(`<h3>Sair da Partida?</h3><p>Você perderá a partida se sair agora.</p><div class="modal-actions"><button class="btn btn-secondary btn-sm" onclick="hideModal()">Continuar</button><button class="btn btn-danger btn-sm" onclick="quitMatch()">Sair</button></div>`);
+}
+function quitMatch(){
+  hideModal();
+  if(STATE.game?.timer)clearInterval(STATE.game.timer);
+  STATE.game=null;
+  showScreen('home');
+  showToast('Partida encerrada');
+}
+function showChallengeModal(){
+  const opps=OPPONENTS.sort(()=>Math.random()-.5).slice(0,5);
+  showModal(`
+    <h3>Desafiar Alguém</h3>
+    <p>Escolha um oponente para desafiar</p>
+    <div style="text-align:left;max-height:240px;overflow-y:auto">
+      ${opps.map(o=>`
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer" onclick="hideModal();startGame('${TOPICS[Math.floor(Math.random()*TOPICS.length)].id}')">
+          <div style="font-size:24px">${o.avatar}</div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:600">${o.name}</div><div style="font-size:11px;color:var(--text-muted)">${o.role}</div></div>
+          <div style="font-size:11px;color:var(--accent);font-weight:600">DESAFIAR</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="modal-actions" style="margin-top:12px"><button class="btn btn-ghost btn-sm btn-block" onclick="hideModal()">Cancelar</button></div>
+  `);
+}
+
+// ======================== TOAST ========================
+function showToast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast show'+(type?' '+type:'');
+  clearTimeout(t._to);
+  t._to=setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ======================== INIT ========================
+document.addEventListener('DOMContentLoaded',()=>{
+  runSplash();
+  // Prevent pull to refresh
+  document.body.addEventListener('touchmove',e=>{if(e.target.closest('.screen')?.scrollTop===0)e.preventDefault()},{passive:false});
+});
+// Close modal on overlay click
+document.getElementById('modalOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)hideModal()});
+</script>
+</body>
+</html>

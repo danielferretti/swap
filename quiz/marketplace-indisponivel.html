@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#FFFFFF">
+<title>Franq Marketplace - Link Indisponível</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary: #687BEA;
+  --primary-light: #8191ED;
+  --bg: #FFFFFF;
+  --bg-card: #F4F5FB;
+  --text-primary: #131C25;
+  --text-secondary: #5A6170;
+  --text-muted: #8D95A3;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.container {
+  text-align: center;
+  max-width: 480px;
+  width: 100%;
+  animation: fadeIn 0.6s ease;
+}
+
+.illustration {
+  width: 240px;
+  height: auto;
+  margin: 0 auto 32px;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.subtitle {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 32px;
+}
+
+.info-box {
+  background: var(--bg-card);
+  border: 1px solid #E8EAF0;
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 420px;
+}
+
+.info-box svg {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: var(--text-muted);
+}
+
+.info-box p {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  text-align: left;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <img src="error_image.png" alt="Ilustração de erro" class="illustration">
+
+    <h1>Link Indisponível</h1>
+    <p class="subtitle">O link que você acessou não está ativo no momento.</p>
+
+    <div class="info-box">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="16" x2="12" y2="12"/>
+        <line x1="12" y1="8" x2="12.01" y2="8"/>
+      </svg>
+      <p>Se o problema persistir, entre em contato diretamente com o seu Personal Banker.</p>
+    </div>
+  </div>
+</body>
+</html>

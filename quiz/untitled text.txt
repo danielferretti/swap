@@ -1,0 +1,56 @@
+{
+  "mcpServers": {
+    "figma": {
+      "command": "npx",
+      "args": ["-y", "figma-developer-mcp", "--stdio"],
+      "env": {
+        "FIGMA_API_KEY": "figd_b5m3ZiLXVafT8UmUJ29HleM2BNhcvpAClgqTzCoR"
+      }
+    }
+  }
+}
+```
+
+Restart Claude Code after saving.
+
+---
+
+## Step 2 — Get your Figma Personal Access Token
+
+1. Go to **figma.com → Settings → Security → Personal Access Tokens**
+2. Create a token with **Read** scope on Files + Dev Resources
+3. Paste it in the config above
+
+---
+
+## Step 3 — Point Claude at your Franq design file
+
+You'll need your Figma file URL. It looks like:
+`https://www.figma.com/design/LLRzFBygVV3kbtQn9tsHeP/Design-System-Geral`
+
+The file key is the `XXXXXXXX` part. Once the MCP is connected, you can tell Claude Code things like:
+
+> *"Get the color styles from this Figma file: [file key]"*
+> *"Find the Button component in the Franq design system and extract its variants"*
+> *"Get the typography tokens from the Franq Figma file"*
+
+---
+
+## Step 4 — What to ask Claude Code to do
+
+Once connected, a good first prompt sequence:
+```
+1. "Read franq-quiz.html so you understand the app structure"
+
+2. "Connect to Figma file [key] and extract:
+   - All color styles/tokens
+   - Typography scale
+   - Button component variants
+   - Card/surface styles
+   - Any navigation or tab bar components"
+
+3. "Rebuild the CSS :root variables in franq-quiz.html 
+   to match Franq's exact design tokens from Figma"
+
+4. "Redesign the Home screen and Game screen 
+   using Franq's actual components"

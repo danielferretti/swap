@@ -1,0 +1,6 @@
+Using the Figma MCP, connect to file `https://www.figma.com/design/LLRzFBygVV3kbtQn9tsHeP/Design-System-Geral` and:
+1. List all icon components in the design system
+2. For each topic icon (mercado, investimentos, compliance, etc.) 
+   find the closest matching icon component
+3. Export the SVG node data for each
+4. Replace the emoji placeholders in the franq-quiz-v2.html with inline SVGs

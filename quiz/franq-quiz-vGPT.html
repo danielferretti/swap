@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1.0">
+<title>Franq Quiz Challenge</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+font-family:'Inter',sans-serif;
+}
+
+body{
+background:#0b1116;
+display:flex;
+align-items:center;
+justify-content:center;
+height:100vh;
+}
+
+#app{
+width:390px;
+height:844px;
+overflow:hidden;
+position:relative;
+border-radius:30px;
+background:#131C25;
+background:linear-gradient(135deg,#131C25 0%,#1E2A36 50%,#131C25 100%);
+color:white;
+}
+
+.screen{
+position:absolute;
+width:100%;
+height:100%;
+padding:24px;
+transition:transform .4s cubic-bezier(.4,0,.2,1);
+overflow-y:auto;
+}
+
+.hidden{
+transform:translateX(100%);
+}
+
+.center{
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+height:100%;
+text-align:center;
+}
+
+.card{
+background:rgba(255,255,255,.07);
+border:1px solid rgba(255,255,255,.08);
+border-radius:16px;
+padding:16px;
+}
+
+button{
+border:none;
+cursor:pointer;
+transition:all .2s;
+}
+
+button:active{
+transform:scale(.97);
+}
+
+.primary{
+background:linear-gradient(135deg,#687BEA,#4552A0);
+border-radius:50px;
+padding:16px;
+font-weight:700;
+color:white;
+}
+
+.input{
+background:rgba(255,255,255,.07);
+border:1px solid rgba(255,255,255,.1);
+border-radius:10px;
+padding:14px;
+width:100%;
+color:white;
+font-size:16px;
+}
+
+.logo-box{
+width:120px;
+height:120px;
+border-radius:32px;
+background:linear-gradient(135deg,#687BEA,#8290EF);
+display:flex;
+align-items:center;
+justify-content:center;
+box-shadow:0 0 60px rgba(104,123,234,.4);
+margin-bottom:28px;
+}
+
+.logo-circle{
+width:64px;
+height:64px;
+border-radius:50%;
+border:4px solid white;
+}
+
+.title{
+font-size:32px;
+font-weight:800;
+letter-spacing:6px;
+background:linear-gradient(90deg,#fff,#B0BBFF);
+-webkit-background-clip:text;
+color:transparent;
+margin-bottom:8px;
+}
+
+.subtitle{
+font-size:14px;
+opacity:.7;
+letter-spacing:2px;
+margin-bottom:40px;
+}
+
+.loading{
+width:200px;
+height:3px;
+background:rgba(255,255,255,.1);
+border-radius:4px;
+overflow:hidden;
+}
+
+.loading div{
+height:100%;
+background:linear-gradient(90deg,#687BEA,#4552A0);
+width:0;
+animation:load 3s forwards;
+}
+
+@keyframes load{
+to{width:100%;}
+}
+
+h1{
+font-size:28px;
+font-weight:800;
+margin-bottom:8px;
+}
+
+h2{
+font-size:18px;
+font-weight:700;
+margin-bottom:16px;
+}
+
+.muted{
+opacity:.7;
+font-size:14px;
+margin-bottom:24px;
+}
+
+.btn-row{
+display:flex;
+gap:12px;
+}
+
+.topic{
+width:160px;
+border-radius:16px;
+padding:14px;
+background:linear-gradient(135deg,rgba(104,123,234,.3),rgba(104,123,234,.05));
+border:1px solid rgba(255,255,255,.08);
+}
+
+.answer{
+background:rgba(255,255,255,.07);
+border:2px solid rgba(255,255,255,.1);
+border-radius:10px;
+padding:14px;
+margin-bottom:10px;
+}
+
+.correct{
+border-color:#10B981;
+background:rgba(16,185,129,.2);
+}
+
+.wrong{
+border-color:#EF4444;
+background:rgba(239,68,68,.2);
+}
+
+.timer{
+height:6px;
+background:#10B981;
+border-radius:6px;
+margin:10px 0;
+}
+
+.bottom-nav{
+position:absolute;
+bottom:0;
+width:100%;
+height:56px;
+backdrop-filter:blur(20px);
+background:rgba(19,28,37,.95);
+border-top:1px solid rgba(255,255,255,.06);
+display:flex;
+justify-content:space-around;
+align-items:center;
+font-size:10px;
+}
+
+.nav-item{
+opacity:.4;
+display:flex;
+flex-direction:column;
+align-items:center;
+}
+
+.nav-item.active{
+color:#687BEA;
+opacity:1;
+}
+
+.leader-row{
+display:flex;
+justify-content:space-between;
+padding:12px;
+border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.avatar{
+width:40px;
+height:40px;
+border-radius:50%;
+background:linear-gradient(135deg,#687BEA,#8290EF);
+margin-right:10px;
+}
+
+.flex{
+display:flex;
+align-items:center;
+}
+
+.result-win{
+font-size:36px;
+font-weight:900;
+color:#10B981;
+text-shadow:0 0 30px #10B981;
+margin-bottom:24px;
+}
+
+.stat-grid{
+display:grid;
+grid-template-columns:1fr 1fr 1fr;
+gap:12px;
+}
+
+.stat{
+background:rgba(255,255,255,.07);
+padding:14px;
+border-radius:10px;
+text-align:center;
+}
+
+.stat-value{
+font-size:22px;
+font-weight:800;
+color:#687BEA;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+<!-- SPLASH -->
+
+<div class="screen center" id="splash">
+
+<div class="logo-box">
+<div class="logo-circle"></div>
+</div>
+
+<div class="title">FRANQ</div>
+<div class="subtitle">QUIZ CHALLENGE</div>
+
+<div class="loading"><div></div></div>
+
+</div>
+
+<!-- LOGIN -->
+
+<div class="screen hidden center" id="login">
+
+<div class="logo-box" style="width:80px;height:80px;border-radius:24px">
+</div>
+
+<h1>Bem-vindo!</h1>
+<div class="muted">Entre para competir e evoluir</div>
+
+<div style="width:100%">
+
+<input class="input" placeholder="Email">
+
+<br><br>
+
+<input class="input" placeholder="Senha">
+
+<br><br>
+
+<button class="primary" onclick="go('home')" style="width:100%">
+Entrar →
+</button>
+
+</div>
+
+</div>
+
+<!-- HOME -->
+
+<div class="screen hidden" id="home">
+
+<h2>Olá, Rafael</h2>
+
+<div class="btn-row">
+
+<div class="card" onclick="go('match')">
+🎯<br>
+Desafio
+</div>
+
+<div class="card">
+📚<br>
+Treinar
+</div>
+
+</div>
+
+<br>
+
+<div class="card">
+🔥 Missões do Dia
+
+<br><br>
+
+<div style="font-size:12px">Responder 5 perguntas</div>
+<div class="timer"></div>
+
+<div style="font-size:12px">Ganhar 1 partida</div>
+<div class="timer"></div>
+
+</div>
+
+<br>
+
+<div style="display:flex;gap:12px;overflow-x:auto">
+
+<div class="topic">💰 Investimentos</div>
+<div class="topic">📊 Macro</div>
+<div class="topic">🏦 Bancos</div>
+
+</div>
+
+</div>
+
+<!-- MATCH -->
+
+<div class="screen hidden center" id="match">
+
+<div style="color:#687BEA;font-size:13px;margin-bottom:20px">INVESTIMENTOS</div>
+
+<div style="display:flex;gap:80px;margin-bottom:20px">
+
+<div>
+<div class="avatar" style="width:80px;height:80px"></div>
+Você
+</div>
+
+<div style="font-size:28px;font-weight:900;color:#687BEA;text-shadow:0 0 20px #687BEA">
+VS
+</div>
+
+<div>
+<div class="avatar" style="width:80px;height:80px"></div>
+Maria
+</div>
+
+</div>
+
+<div id="count" style="font-size:72px;font-weight:900;color:#687BEA">3</div>
+
+</div>
+
+<!-- GAME -->
+
+<div class="screen hidden" id="game">
+
+<div style="font-size:11px;color:#687BEA">INVESTIMENTOS</div>
+
+<div class="timer"></div>
+
+<h2>
+Qual ativo é considerado renda fixa?
+</h2>
+
+<div class="answer" onclick="answer(true)">Tesouro Direto</div>
+<div class="answer" onclick="answer(false)">Ações</div>
+<div class="answer" onclick="answer(false)">Criptomoedas</div>
+<div class="answer" onclick="answer(false)">Commodities</div>
+
+</div>
+
+<!-- RESULT -->
+
+<div class="screen hidden center" id="result">
+
+<div class="result-win">VITÓRIA!</div>
+
+<div class="card" style="width:100%;margin-bottom:20px">
+
+<div class="leader-row">
+<span>Pontos</span>
+<span style="color:#8290EF">+120</span>
+</div>
+
+<div class="leader-row">
+<span>Bônus combo</span>
+<span style="color:#FF8C42">+30</span>
+</div>
+
+<div class="leader-row">
+<span>Moedas</span>
+<span style="color:#687BEA">+15</span>
+</div>
+
+</div>
+
+<button class="primary" onclick="go('match')" style="width:100%;margin-bottom:10px">
+Revanche
+</button>
+
+<button class="card" onclick="go('home')" style="width:100%">
+Início
+</button>
+
+</div>
+
+<!-- LEADERBOARD -->
+
+<div class="screen hidden" id="leader">
+
+<h2>Ranking Geral</h2>
+
+<div class="leader-row">
+<div class="flex">
+🥇
+<div class="avatar"></div>
+Ana
+</div>
+<span style="color:#687BEA">9820</span>
+</div>
+
+<div class="leader-row">
+<div class="flex">
+🥈
+<div class="avatar"></div>
+Pedro
+</div>
+<span style="color:#687BEA">8700</span>
+</div>
+
+<div class="leader-row">
+<div class="flex">
+🥉
+<div class="avatar"></div>
+Carla
+</div>
+<span style="color:#687BEA">8100</span>
+</div>
+
+</div>
+
+<!-- PROFILE -->
+
+<div class="screen hidden" id="profile">
+
+<div class="card" style="text-align:center">
+
+<div class="avatar" style="width:80px;height:80px;margin:auto"></div>
+
+<h2>Rafael Ferretti</h2>
+
+<div class="muted">Financial Advisor</div>
+
+</div>
+
+<br>
+
+<div class="stat-grid">
+
+<div class="stat">
+<div class="stat-value">142</div>
+Vitórias
+</div>
+
+<div class="stat">
+<div class="stat-value">18</div>
+Streak
+</div>
+
+<div class="stat">
+<div class="stat-value">6200</div>
+XP
+</div>
+
+</div>
+
+</div>
+
+<!-- NAV -->
+
+<div class="bottom-nav">
+
+<div class="nav-item active" onclick="go('home')">
+🏠
+Home
+</div>
+
+<div class="nav-item" onclick="go('leader')">
+🏆
+Ranking
+</div>
+
+<div class="nav-item" onclick="go('profile')">
+👤
+Perfil
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+setTimeout(()=>{
+go('login')
+},3000)
+
+function go(id){
+
+document.querySelectorAll('.screen').forEach(s=>{
+s.classList.add('hidden')
+})
+
+document.getElementById(id).classList.remove('hidden')
+
+}
+
+let countdown=3
+
+setInterval(()=>{
+let el=document.getElementById('count')
+if(!el)return
+
+if(countdown>1){
+countdown--
+el.innerText=countdown
+}else{
+go('game')
+}
+},1000)
+
+function answer(correct){
+
+let btns=document.querySelectorAll('.answer')
+
+btns.forEach(b=>b.onclick=null)
+
+if(correct){
+event.target.classList.add('correct')
+}else{
+event.target.classList.add('wrong')
+}
+
+setTimeout(()=>{
+go('result')
+},1200)
+
+}
+
+</script>
+
+</body>
+</html>
