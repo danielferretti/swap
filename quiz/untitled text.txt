@@ -4,7 +4,7 @@
       "command": "npx",
       "args": ["-y", "figma-developer-mcp", "--stdio"],
       "env": {
-        "FIGMA_API_KEY": "figd_b5m3ZiLXVafT8UmUJ29HleM2BNhcvpAClgqTzCoR"
+        "FIGMA_API_KEY": "xxREVOKEDxx"
       }
     }
   }
@@ -26,7 +26,7 @@ Restart Claude Code after saving.
 ## Step 3 — Point Claude at your Franq design file
 
 You'll need your Figma file URL. It looks like:
-`https://www.figma.com/design/LLRzFBygVV3kbtQn9tsHeP/Design-System-Geral`
+`xxREVOKEDxx`
 
 The file key is the `XXXXXXXX` part. Once the MCP is connected, you can tell Claude Code things like:
 
