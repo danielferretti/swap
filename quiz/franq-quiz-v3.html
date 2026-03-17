@@ -1,0 +1,2180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0F1923">
+<meta name="mobile-web-app-capable" content="yes">
+<title>FRANQ QUIZ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#1C2133;--card:rgba(255,255,255,0.06);--card-border:rgba(255,255,255,0.08);
+--accent:#687BEA;--accent-light:#8899FD;--success:#10B981;--danger:#EF4444;--gold:#FFD700;--flame:#FF6B35;
+--text:#FFFFFF;--text-sec:rgba(255,255,255,0.55);--text-ter:rgba(255,255,255,0.35);
+--r-card:18px;--r-btn:12px;--r-lg:24px;
+}
+html,body{
+font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);
+overflow-x:hidden;-webkit-tap-highlight-color:transparent;
+height:100%;overscroll-behavior:none;
+}
+body{display:flex;justify-content:center;min-height:100%;-webkit-touch-callout:none}
+::-webkit-scrollbar{display:none}
+#app{
+width:100%;max-width:390px;position:relative;min-height:100vh;min-height:100dvh;
+overflow:hidden;padding-bottom:env(safe-area-inset-bottom,0);touch-action:manipulation;
+}
+.screen{
+display:none;flex-direction:column;position:absolute;inset:0;
+overflow-y:auto;overflow-x:hidden;padding:20px;padding-top:calc(env(safe-area-inset-top,20px) + 10px);
+}
+.screen.active{display:flex}
+.screen.with-nav{padding-bottom:90px}
+button{
+font-family:'Inter',sans-serif;border:none;cursor:pointer;
+-webkit-user-select:none;user-select:none;transition:all .15s;
+touch-action:manipulation;min-height:44px;
+}
+button:active{transform:scale(0.97);opacity:0.9}
+input{
+font-family:'Inter',sans-serif;width:100%;padding:14px 18px;
+background:var(--card);border:1px solid var(--card-border);border-radius:var(--r-btn);
+color:var(--text);font-size:15px;outline:none;transition:border .2s;min-height:48px;
+}
+input:focus{border-color:var(--accent)}
+input::placeholder{color:var(--text-ter)}
+.btn-primary{
+width:100%;padding:16px;border-radius:var(--r-btn);font-weight:700;font-size:16px;
+background:linear-gradient(135deg,var(--accent),#8B5CF6);color:#fff;letter-spacing:0.5px;
+}
+.btn-primary:active{transform:scale(0.97);filter:brightness(0.9)}
+.btn-secondary{
+padding:12px 20px;border-radius:var(--r-btn);font-weight:600;font-size:14px;
+background:var(--card);color:var(--text);border:1px solid var(--card-border);
+}
+.btn-secondary:active{background:rgba(255,255,255,0.1)}
+.card{
+background:rgba(255,255,255,0.04);border:1px solid var(--card-border);border-radius:var(--r-card);
+padding:16px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.gradient-text{
+background:linear-gradient(135deg,var(--accent),#8B5CF6,var(--flame));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes bounceIn{0%{opacity:0;transform:scale(0.3)}50%{transform:scale(1.05)}70%{transform:scale(0.95)}100%{opacity:1;transform:scale(1)}}
+@keyframes slideInRight{from{opacity:0;transform:translateX(50px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-50px)}to{opacity:1;transform:translateX(0)}}
+@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes countUp{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes comboBounce{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+@keyframes progressFill{from{width:0}to{width:var(--fill)}}
+@keyframes xpFill{from{width:var(--from)}to{width:var(--to)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(0.5)}to{opacity:1;transform:scale(1)}}
+@keyframes springBounce{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+@keyframes timerPulse{0%,100%{box-shadow:0 0 8px rgba(239,68,68,0.3)}50%{box-shadow:0 0 20px rgba(239,68,68,0.6)}}
+@keyframes shimmerGradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes coinBounce{0%{transform:translateY(0)}30%{transform:translateY(-8px)}60%{transform:translateY(0)}80%{transform:translateY(-3px)}100%{transform:translateY(0)}}
+@keyframes roundOverlay{0%{opacity:0;transform:scale(0.5)}40%{opacity:1;transform:scale(1.1)}60%{transform:scale(0.95)}80%{transform:scale(1.02)}100%{transform:scale(1)}}
+.anim-fiu{animation:fadeInUp .4s ease both}
+.anim-fi{animation:fadeIn .3s ease both}
+.anim-bi{animation:bounceIn .5s ease both}
+.anim-sir{animation:slideInRight .35s ease both}
+.anim-sil{animation:slideInLeft .35s ease both}
+
+#splash{justify-content:center;align-items:center;gap:24px}
+.splash-logo{
+width:90px;height:90px;border-radius:var(--r-lg);
+background:linear-gradient(135deg,var(--accent),#8B5CF6);
+display:flex;align-items:center;justify-content:center;font-size:42px;
+box-shadow:0 8px 32px rgba(104,123,234,0.4);
+animation:bounceIn .6s ease, float 3s ease-in-out infinite;
+}
+.splash-title{
+font-size:36px;font-weight:900;letter-spacing:2px;text-align:center;
+background:linear-gradient(135deg,var(--accent),#8B5CF6,var(--flame),var(--accent));
+background-size:300% 100%;
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+animation:shimmerGradient 3s ease infinite;
+}
+.splash-tagline{font-size:14px;color:var(--text-sec);font-weight:400;letter-spacing:1px}
+.splash-bar-wrap{width:200px;height:4px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden}
+.splash-bar{height:100%;width:0;border-radius:4px;background:linear-gradient(90deg,var(--accent),#8B5CF6);transition:width .1s linear}
+
+#login{justify-content:center;gap:16px;padding:40px 24px}
+.login-logo{text-align:center;margin-bottom:10px}
+.login-logo-icon{
+width:64px;height:64px;border-radius:16px;margin:0 auto 12px;
+background:linear-gradient(135deg,var(--accent),#8B5CF6);
+display:flex;align-items:center;justify-content:center;font-size:28px;
+}
+.login-title{font-size:24px;font-weight:800;text-align:center;margin-bottom:6px}
+.login-sub{text-align:center;color:var(--text-sec);font-size:13px;margin-bottom:12px}
+.login-field{margin-bottom:4px}
+.login-field label{display:block;font-size:12px;font-weight:600;color:var(--text-sec);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.login-error{color:var(--danger);font-size:12px;min-height:18px;margin-top:4px}
+
+#home{gap:18px;padding-bottom:100px}
+.home-header{display:flex;align-items:center;justify-content:space-between}
+.home-profile{display:flex;align-items:center;gap:12px}
+.avatar{
+width:48px;height:48px;border-radius:50%;
+background:linear-gradient(135deg,var(--accent),#8B5CF6);
+display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;
+overflow:hidden;border:2.5px solid #A3D977;
+}
+.avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.avatar.sm{width:36px;height:36px;font-size:18px;border-width:0}
+.avatar.lg{width:64px;height:64px;font-size:32px;border-width:2.5px}
+.avatar.xl{width:80px;height:80px;font-size:40px;border-width:3px}
+.avatar.no-ring{border:none}
+.home-name{font-weight:700;font-size:16px}
+.home-role{font-size:11px;color:var(--text-sec)}
+.rank-pill{
+display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;
+font-size:11px;font-weight:600;background:rgba(104,123,234,0.15);margin-top:2px;
+}
+.home-actions{display:flex;align-items:center;gap:10px}
+.chat-btn{
+width:44px;height:38px;border-radius:12px;background:none;border:none;
+display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;
+}
+.chat-btn img{width:100%;height:100%;object-fit:contain}
+
+.play-buttons{display:flex;gap:10px}
+.play-btn{
+flex:1;aspect-ratio:1/0.82;border-radius:0;font-weight:700;font-size:15px;
+color:#fff;text-align:center;position:relative;overflow:visible;
+background:none!important;border:none;padding:0;
+}
+.play-btn .play-bg{position:absolute;inset:0;pointer-events:none}
+.play-btn .play-bg img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 4px 14px rgba(104,123,234,0.35))}
+.play-btn .play-content{
+position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;
+justify-content:center;gap:4px;height:100%;padding:14px 10px;
+}
+.play-btn .play-icon-img{width:62px;height:38px;object-fit:contain}
+.play-btn .play-label{font-size:16px;font-weight:800;letter-spacing:1px;text-shadow:0 1px 3px rgba(0,0,0,0.2)}
+.play-btn .play-sub{font-size:10px;font-weight:400;opacity:.75;margin-top:0}
+.play-btn:active{transform:scale(0.96);opacity:0.9}
+
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.section-title{font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:0}
+.section-link{font-size:12px;font-weight:600;color:var(--accent-light);cursor:pointer;background:none;border:none;white-space:nowrap}
+
+.topics-grid-home{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.topic-card-home{
+border-radius:0;text-align:center;
+position:relative;overflow:visible;cursor:pointer;
+background:none!important;
+display:flex;flex-direction:column;align-items:center;
+padding:0;aspect-ratio:1/1;
+}
+.topic-card-home .topic-bg{
+position:absolute;inset:0;pointer-events:none;
+}
+.topic-card-home .topic-bg img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 3px 8px rgba(0,0,0,0.2))}
+.topic-card-home .topic-content{
+position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;
+justify-content:center;gap:4px;height:100%;padding:10px 4px;
+}
+.topic-card-home .topic-icon-img{width:38px;height:38px;object-fit:contain}
+.topic-card-home .topic-name{font-size:10px;font-weight:700;color:#3A4A3C;line-height:1.2}
+.topic-card-home:active{transform:scale(0.95)}
+
+.mission-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.mission-item:last-child{border-bottom:none}
+.mission-icon{font-size:20px;flex-shrink:0}
+.mission-info{flex:1;min-width:0}
+.mission-name{font-size:13px;font-weight:600}
+.mission-prog-bar{height:4px;background:rgba(255,255,255,0.08);border-radius:4px;margin-top:4px;overflow:hidden}
+.mission-prog-fill{height:100%;border-radius:4px;background:var(--accent);transition:width .3s}
+.mission-val{font-size:11px;color:var(--text-sec);font-weight:600;flex-shrink:0}
+.flame-reward{
+display:flex;align-items:center;gap:6px;justify-content:center;
+padding:10px;margin-top:6px;border-radius:var(--r-btn);
+background:linear-gradient(135deg,rgba(255,107,53,0.15),rgba(255,215,0,0.1));
+font-size:13px;font-weight:600;color:var(--flame);min-height:44px;
+}
+
+.ranking-list{display:flex;flex-direction:column;gap:0}
+.ranking-row{
+display:flex;align-items:center;gap:8px;padding:9px 0;
+border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.ranking-row:last-child{border-bottom:none}
+.ranking-pos{width:16px;font-size:13px;font-weight:800;color:var(--text-sec);text-align:center;flex-shrink:0}
+.ranking-medals{display:flex;gap:1px;flex-shrink:0;width:22px;align-items:center}
+.ranking-medals img{width:11px;height:18px}
+.ranking-avatar{width:34px;height:34px;border-radius:50%;overflow:hidden;flex-shrink:0;background:var(--card);border:none}
+.ranking-avatar img{width:100%;height:100%;object-fit:cover}
+.ranking-info{flex:1;min-width:0}
+.ranking-name{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ranking-role{font-size:9px;color:var(--text-sec);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ranking-score{font-size:13px;font-weight:800;color:var(--accent-light);flex-shrink:0;min-width:36px;text-align:right}
+.ranking-challenge-btn{
+padding:4px 8px;border-radius:6px;font-size:9px;font-weight:700;
+background:var(--accent);color:#fff;border:none;cursor:pointer;flex-shrink:0;
+letter-spacing:0.3px;min-height:24px;
+}
+.ranking-challenge-btn:active{transform:scale(0.95)}
+.ranking-row.me{background:rgba(104,123,234,0.06);border-radius:var(--r-btn);padding:9px 8px;margin:0 -8px}
+
+.hot-banner{
+position:absolute;top:0;left:0;right:0;padding:3px;text-align:center;
+background:linear-gradient(90deg,var(--flame),var(--gold));
+font-size:9px;font-weight:800;color:#000;letter-spacing:.5px;
+}
+.hot-2x{
+position:absolute;top:26px;right:6px;
+background:var(--flame);color:#fff;font-size:9px;font-weight:800;
+padding:2px 6px;border-radius:8px;
+}
+
+.lb-preview{display:flex;flex-direction:column;gap:8px}
+.lb-row{display:flex;align-items:center;gap:10px;padding:8px;border-radius:var(--r-btn);background:rgba(255,255,255,0.02)}
+.lb-pos{width:24px;text-align:center;font-weight:800;font-size:14px}
+.lb-name{flex:1;font-size:13px;font-weight:600}
+.lb-pts{font-size:13px;font-weight:700;color:var(--accent)}
+
+#topics{gap:16px}
+.topics-header{display:flex;align-items:center;gap:12px;margin-bottom:4px}
+.back-btn{
+width:44px;height:44px;border-radius:50%;background:var(--card);
+display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--text);
+border:1px solid var(--card-border);
+}
+.screen-title{font-size:22px;font-weight:800}
+.topics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.topic-card{
+text-align:center;position:relative;overflow:visible;cursor:pointer;
+background:none!important;border:none;
+display:flex;flex-direction:column;align-items:center;padding:0;aspect-ratio:1/1;
+}
+.topic-card .topic-bg{position:absolute;inset:0;pointer-events:none}
+.topic-card .topic-bg img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 3px 8px rgba(0,0,0,0.2))}
+.topic-card .topic-content{
+position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;
+justify-content:center;gap:6px;height:100%;padding:10px 4px;
+}
+.topic-card:active{transform:scale(0.97)}
+.topic-card .topic-icon-img{width:42px;height:42px;object-fit:contain}
+.topic-card .topic-icon{font-size:36px}
+.topic-card .topic-name{font-size:11px;font-weight:700;color:#3A4A3C;line-height:1.2}
+.topic-card .topic-meta{font-size:9px;color:rgba(45,59,46,0.5)}
+.topic-card .hot-banner{font-size:10px;padding:4px}
+
+#matchmaking{justify-content:center;align-items:center;gap:24px}
+.match-topic{font-size:14px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:1px}
+.match-vs{display:flex;align-items:center;gap:24px;margin:20px 0}
+.match-player{text-align:center}
+.match-player .avatar{margin:0 auto 8px}
+.match-player-name{font-size:14px;font-weight:700}
+.match-player-role{font-size:11px;color:var(--text-sec)}
+.vs-text{
+font-size:28px;font-weight:900;
+background:linear-gradient(135deg,var(--flame),var(--gold));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.match-status{font-size:16px;font-weight:600;color:var(--text-sec);text-align:center}
+.match-countdown{font-size:72px;font-weight:900;animation:bounceIn .4s ease}
+.match-cancel{
+padding:12px 32px;border-radius:var(--r-btn);background:rgba(239,68,68,0.15);
+color:var(--danger);font-weight:600;font-size:14px;
+}
+
+#gameplay{gap:10px;padding:12px 16px;touch-action:manipulation}
+.game-topbar{display:flex;align-items:center;justify-content:space-between}
+.game-topic{font-size:13px;font-weight:600;color:var(--accent)}
+.game-round{font-size:13px;font-weight:700}
+.game-quit{
+padding:6px 14px;border-radius:20px;background:rgba(239,68,68,0.12);
+color:var(--danger);font-size:12px;font-weight:600;min-height:36px;
+}
+.game-scores{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+.game-player{display:flex;align-items:center;gap:8px}
+.game-player.right{flex-direction:row-reverse}
+.game-player-name{font-size:12px;font-weight:600;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.game-player-score{font-size:18px;font-weight:900}
+.score-bar-wrap{height:6px;background:rgba(255,255,255,0.06);border-radius:6px;overflow:hidden;margin-bottom:6px;display:flex}
+.score-bar-left{height:100%;background:linear-gradient(90deg,var(--accent),#8B5CF6);transition:width .4s;border-radius:6px 0 0 6px}
+.score-bar-right{height:100%;background:linear-gradient(90deg,var(--flame),#FF8C42);transition:width .4s;border-radius:0 6px 6px 0}
+.timer-bar-wrap{height:6px;background:rgba(255,255,255,0.06);border-radius:6px;overflow:hidden;position:relative}
+.timer-bar{height:100%;border-radius:6px;transition:background .3s;will-change:width}
+.timer-bar.green{background:linear-gradient(90deg,var(--success),#34D399)}
+.timer-bar.yellow{background:linear-gradient(90deg,var(--gold),#FBBF24)}
+.timer-bar.red{background:linear-gradient(90deg,var(--danger),#F87171)}
+.timer-danger .timer-bar-wrap{animation:timerPulse 0.5s ease infinite}
+.timer-number{text-align:center;font-size:28px;font-weight:900;margin:2px 0;transition:color .3s}
+.timer-number.green{color:var(--success)}
+.timer-number.yellow{color:var(--gold)}
+.timer-number.red{color:var(--danger)}
+.question-text{font-size:16px;font-weight:600;line-height:1.5;text-align:center;min-height:50px;padding:6px 0}
+.answers{display:flex;flex-direction:column;gap:8px}
+.answer-btn{
+width:100%;padding:14px 16px;border-radius:var(--r-btn);background:var(--card);
+border:1px solid var(--card-border);color:var(--text);font-size:14px;font-weight:600;
+text-align:left;display:flex;align-items:center;gap:10px;transition:all .2s;
+min-height:52px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.answer-btn:active:not(.correct):not(.wrong):not(.dimmed){transform:scale(0.98);border-color:var(--accent)}
+.answer-btn .letter{
+width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,0.06);
+display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;
+flex-shrink:0;transition:all .2s;
+}
+.answer-btn.correct{background:rgba(16,185,129,0.2);border-color:var(--success)}
+.answer-btn.correct .letter{background:var(--success);color:#fff}
+.answer-btn.wrong{background:rgba(239,68,68,0.2);border-color:var(--danger)}
+.answer-btn.wrong .letter{background:var(--danger);color:#fff}
+.answer-btn.dimmed{opacity:0.3;pointer-events:none}
+.answer-btn.removed{display:none}
+.explanation-card{
+margin-top:8px;padding:12px 16px;border-radius:var(--r-btn);
+background:rgba(104,123,234,0.12);border:1px solid rgba(104,123,234,0.25);
+font-size:13px;line-height:1.5;color:var(--text-sec);
+animation:slideUp .3s ease both;
+}
+.explanation-card strong{color:var(--text);font-weight:700}
+.powerups{display:flex;gap:8px;justify-content:center;margin-top:2px}
+.powerup-btn{
+flex:1;padding:8px 4px;border-radius:var(--r-btn);background:var(--card);
+border:1px solid var(--card-border);text-align:center;font-size:11px;font-weight:600;
+color:var(--text);max-width:110px;min-height:44px;
+}
+.powerup-btn:active:not(.used):not(.locked){transform:scale(0.95);border-color:var(--accent)}
+.powerup-btn .pu-icon{font-size:18px;display:block;margin-bottom:2px}
+.powerup-btn .pu-cost{font-size:10px;color:var(--gold);font-weight:700}
+.powerup-btn.locked{opacity:0.35;pointer-events:none}
+.powerup-btn.used{opacity:0.25;pointer-events:none}
+.combo-indicator{display:flex;align-items:center;justify-content:center;gap:6px;min-height:24px;margin-top:2px}
+.combo-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.15);transition:background .2s}
+.combo-dot.active{background:var(--gold)}
+.combo-badge{
+padding:3px 10px;border-radius:12px;font-size:12px;font-weight:800;
+background:linear-gradient(135deg,var(--gold),var(--flame));color:#000;
+animation:springBounce .4s cubic-bezier(.34,1.56,.64,1);
+}
+
+.round-overlay{
+position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;
+background:rgba(15,25,35,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.round-overlay-text{
+font-size:42px;font-weight:900;animation:roundOverlay .6s ease both;
+background:linear-gradient(135deg,var(--accent),#8B5CF6);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+#results{justify-content:center;align-items:center;gap:14px;text-align:center;padding-bottom:40px}
+.result-banner{
+width:100%;padding:24px;border-radius:var(--r-lg);font-size:28px;font-weight:900;letter-spacing:1px;
+}
+.result-banner.win{background:linear-gradient(135deg,rgba(16,185,129,0.25),rgba(104,123,234,0.15))}
+.result-banner.draw{background:linear-gradient(135deg,rgba(104,123,234,0.25),rgba(139,92,246,0.15))}
+.result-banner.loss{background:linear-gradient(135deg,rgba(239,68,68,0.25),rgba(239,68,68,0.08))}
+.result-score-compare{display:flex;align-items:center;justify-content:center;gap:20px;font-size:32px;font-weight:900}
+.result-score-compare .vs-x{font-size:16px;color:var(--text-sec);font-weight:700}
+.rewards-list{width:100%;text-align:left}
+.reward-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px}
+.reward-row:last-child{border-bottom:none}
+.reward-label{color:var(--text-sec);font-weight:500}
+.reward-val{font-weight:700;color:var(--success)}
+.result-coins{display:flex;align-items:center;justify-content:center;gap:6px;font-size:20px;font-weight:800;color:var(--gold)}
+.xp-section{width:100%}
+.xp-label{font-size:12px;color:var(--text-sec);margin-bottom:4px;display:flex;justify-content:space-between}
+.xp-bar-wrap{height:8px;background:rgba(255,255,255,0.06);border-radius:8px;overflow:hidden}
+.xp-bar{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--accent),#8B5CF6);transition:width 1s ease}
+.level-up-flash{
+position:fixed;inset:0;background:rgba(104,123,234,0.3);
+display:flex;align-items:center;justify-content:center;z-index:999;
+font-size:36px;font-weight:900;animation:fadeIn .3s ease;cursor:pointer;
+}
+.result-actions{display:flex;flex-direction:column;gap:10px;width:100%}
+.result-actions .btn-primary{font-size:14px;padding:14px}
+
+.review-section{width:100%;text-align:left;margin-top:4px}
+.review-toggle{
+width:100%;padding:14px;border-radius:var(--r-btn);background:rgba(104,123,234,0.12);
+border:1px solid rgba(104,123,234,0.25);color:var(--accent);font-weight:700;font-size:14px;
+text-align:center;min-height:48px;
+}
+.review-toggle:active{background:rgba(104,123,234,0.2)}
+.review-list{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.review-item{padding:14px;border-radius:var(--r-card);background:var(--card);border:1px solid var(--card-border)}
+.review-q{font-size:14px;font-weight:700;margin-bottom:8px;line-height:1.4}
+.review-answer{
+padding:8px 12px;border-radius:8px;font-size:13px;margin-bottom:4px;
+display:flex;align-items:center;gap:8px;
+}
+.review-answer.correct-answer{background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:var(--success)}
+.review-answer.wrong-answer{background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:var(--danger)}
+.review-answer.neutral{background:rgba(255,255,255,0.03);border:1px solid transparent;color:var(--text-ter)}
+.review-explanation{
+margin-top:8px;padding:10px 12px;border-radius:8px;
+background:rgba(104,123,234,0.08);font-size:12px;line-height:1.5;color:var(--text-sec);
+}
+
+#leaderboard{gap:16px}
+.lb-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;flex-wrap:nowrap}
+.lb-tab{
+padding:8px 14px;border-radius:20px;background:var(--card);border:1px solid var(--card-border);
+font-size:12px;font-weight:600;color:var(--text-sec);white-space:nowrap;flex-shrink:0;min-height:44px;
+}
+.lb-tab:active{transform:scale(0.97)}
+.lb-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.lb-reset{text-align:center;font-size:12px;color:var(--text-ter);margin-bottom:4px}
+.lb-list{display:flex;flex-direction:column;gap:6px}
+.lb-entry{
+display:flex;align-items:center;gap:10px;padding:10px 12px;
+border-radius:var(--r-btn);background:var(--card);border:1px solid var(--card-border);
+}
+.lb-entry.me{border-color:var(--accent);background:rgba(104,123,234,0.1)}
+.lb-entry.top1{border-color:var(--gold);background:rgba(255,215,0,0.08)}
+.lb-entry.top2{border-color:#C0C0C0;background:rgba(192,192,192,0.06)}
+.lb-entry.top3{border-color:#CD7F32;background:rgba(205,127,50,0.06)}
+.lb-rank{width:28px;text-align:center;font-weight:800;font-size:14px}
+.lb-entry-avatar{width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0;background:var(--card)}
+.lb-entry-avatar img{width:100%;height:100%;object-fit:cover}
+.lb-entry-info{flex:1;min-width:0}
+.lb-entry-name{font-size:13px;font-weight:700}
+.lb-entry-role{font-size:10px;color:var(--text-sec)}
+.lb-entry-pts{font-size:14px;font-weight:700;color:var(--accent);flex-shrink:0}
+.lb-challenge-btn{
+padding:5px 10px;border-radius:8px;font-size:10px;font-weight:700;
+background:var(--accent);color:#fff;border:none;cursor:pointer;flex-shrink:0;
+}
+.lb-challenge-btn:active{transform:scale(0.95)}
+
+#profile{align-items:center;gap:16px;text-align:center}
+.profile-name{font-size:22px;font-weight:800;margin-top:8px}
+.profile-role{font-size:13px;color:var(--text-sec)}
+.profile-rank{margin-top:4px}
+.profile-level{width:100%;margin-top:8px}
+.profile-level-label{display:flex;justify-content:space-between;font-size:12px;color:var(--text-sec);margin-bottom:4px}
+.profile-xp-bar{height:8px;background:rgba(255,255,255,0.06);border-radius:8px;overflow:hidden;width:100%}
+.profile-xp-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--accent),#8B5CF6)}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;width:100%;margin-top:8px}
+.stat-box{
+padding:14px 8px;border-radius:var(--r-card);background:var(--card);
+border:1px solid var(--card-border);text-align:center;
+backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.stat-val{font-size:20px;font-weight:800}
+.stat-label{font-size:10px;color:var(--text-sec);font-weight:600;text-transform:uppercase;margin-top:2px}
+.medals-section{width:100%;text-align:left;margin-top:4px}
+.medals-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:8px}
+.medal{
+padding:12px 4px;border-radius:var(--r-btn);background:var(--card);border:1px solid var(--card-border);
+text-align:center;font-size:24px;position:relative;
+}
+.medal.locked{opacity:0.3;filter:grayscale(1)}
+.medal-name{font-size:8px;font-weight:600;color:var(--text-sec);margin-top:4px;line-height:1.2}
+
+#settings{gap:12px}
+.setting-row{
+display:flex;align-items:center;justify-content:space-between;padding:14px 0;
+border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.setting-label{font-size:14px;font-weight:600}
+.toggle{
+width:48px;height:28px;border-radius:14px;background:rgba(255,255,255,0.1);
+position:relative;cursor:pointer;transition:background .2s;border:none;min-height:28px;
+}
+.toggle.on{background:var(--accent)}
+.toggle::after{
+content:'';position:absolute;width:22px;height:22px;border-radius:50%;
+background:#fff;top:3px;left:3px;transition:transform .2s;
+}
+.toggle.on::after{transform:translateX(20px)}
+.btn-danger{
+width:100%;padding:14px;border-radius:var(--r-btn);
+background:rgba(239,68,68,0.12);color:var(--danger);font-weight:700;font-size:15px;margin-top:8px;
+}
+.btn-feedback{
+width:100%;padding:14px;border-radius:var(--r-btn);
+background:var(--card);border:1px solid var(--card-border);color:var(--text);font-weight:600;font-size:15px;
+}
+
+.bottom-nav{
+position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+width:100%;max-width:390px;
+background:rgba(20,24,38,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+border-top:1px solid rgba(255,255,255,0.05);
+display:none;padding:6px 0;padding-bottom:calc(6px + env(safe-area-inset-bottom,0));z-index:100;
+}
+.bottom-nav.visible{display:flex}
+.nav-items{display:flex;justify-content:space-around;width:100%}
+.nav-item{
+display:flex;flex-direction:column;align-items:center;gap:3px;
+padding:4px 12px;border-radius:12px;background:transparent;color:var(--text-ter);
+font-size:9px;font-weight:600;transition:all .2s;border:none;min-height:44px;
+letter-spacing:0.3px;text-transform:uppercase;
+}
+.nav-item.active{color:var(--accent-light)}
+.nav-item .nav-icon{width:24px;height:22px;display:flex;align-items:center;justify-content:center}
+.nav-item .nav-icon img{width:20px;height:20px;object-fit:contain;opacity:0.35;transition:all .2s}
+.nav-item.active .nav-icon img{opacity:0.9;filter:brightness(1.4) saturate(1.3)}
+
+.challenge-overlay{
+position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;
+display:none;align-items:flex-end;justify-content:center;
+}
+.challenge-overlay.show{display:flex}
+.challenge-sheet{
+width:100%;max-width:390px;background:var(--bg);border-radius:var(--r-lg) var(--r-lg) 0 0;
+padding:24px 20px 40px;max-height:70vh;overflow-y:auto;
+border:1px solid var(--card-border);border-bottom:none;
+}
+.challenge-title{font-size:18px;font-weight:800;margin-bottom:16px;text-align:center}
+.challenge-opponent{
+display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;
+border-radius:var(--r-btn);background:var(--card);border:1px solid var(--card-border);min-height:52px;
+}
+.challenge-opponent-info{flex:1}
+.challenge-opponent-name{font-weight:700;font-size:14px}
+.challenge-opponent-role{font-size:11px;color:var(--text-sec)}
+.challenge-fight-btn{
+padding:8px 16px;border-radius:var(--r-btn);
+background:linear-gradient(135deg,var(--flame),#FF8C42);color:#fff;font-weight:700;font-size:13px;
+}
+.challenge-close{
+width:100%;padding:14px;border-radius:var(--r-btn);background:var(--card);
+border:1px solid var(--card-border);color:var(--text-sec);font-weight:600;font-size:14px;margin-top:12px;
+}
+
+.tutorial-overlay{
+position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.8);
+display:flex;align-items:center;justify-content:center;
+backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.tutorial-card{
+width:90%;max-width:360px;padding:32px 24px;border-radius:var(--r-lg);
+background:linear-gradient(135deg,rgba(15,25,35,0.98),rgba(30,40,55,0.98));
+border:1px solid rgba(104,123,234,0.3);text-align:center;
+animation:scaleIn .4s ease both;
+}
+.tutorial-icon{font-size:56px;margin-bottom:16px}
+.tutorial-step-dots{display:flex;gap:8px;justify-content:center;margin-bottom:16px}
+.tutorial-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.15)}
+.tutorial-dot.active{background:var(--accent)}
+.tutorial-title{font-size:18px;font-weight:800;margin-bottom:10px}
+.tutorial-desc{font-size:14px;color:var(--text-sec);line-height:1.6;margin-bottom:20px}
+.tutorial-btn{
+padding:14px 32px;border-radius:var(--r-btn);font-weight:700;font-size:15px;
+background:linear-gradient(135deg,var(--accent),#8B5CF6);color:#fff;
+}
+
+.confetti-piece{
+position:fixed;top:-10px;z-index:1000;pointer-events:none;will-change:transform;
+}
+
+#chat{gap:0;padding:0;padding-top:0}
+.chat-header{
+display:flex;align-items:center;gap:12px;padding:14px 20px;padding-top:calc(env(safe-area-inset-top,14px) + 10px);
+background:rgba(28,33,51,0.95);border-bottom:1px solid rgba(255,255,255,0.06);
+position:sticky;top:0;z-index:10;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.chat-tabs{display:flex;gap:0;flex:1;background:rgba(255,255,255,0.06);border-radius:10px;overflow:hidden}
+.chat-tab{
+flex:1;padding:8px 0;text-align:center;font-size:12px;font-weight:600;
+color:var(--text-sec);background:none;border:none;cursor:pointer;transition:all .2s;min-height:36px;
+}
+.chat-tab.active{background:var(--accent);color:#fff;border-radius:10px}
+.chat-body{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:12px;padding-bottom:90px}
+
+.news-card{
+padding:14px;border-radius:var(--r-card);background:var(--card);
+border:1px solid var(--card-border);display:flex;gap:12px;align-items:flex-start;
+}
+.news-icon{
+width:40px;height:40px;border-radius:12px;flex-shrink:0;
+display:flex;align-items:center;justify-content:center;font-size:20px;
+}
+.news-icon.bonus{background:rgba(16,185,129,0.15)}
+.news-icon.challenge{background:rgba(104,123,234,0.15)}
+.news-icon.info{background:rgba(255,215,0,0.15)}
+.news-icon.event{background:rgba(255,107,53,0.15)}
+.news-content{flex:1;min-width:0}
+.news-title{font-size:13px;font-weight:700;margin-bottom:3px}
+.news-desc{font-size:11px;color:var(--text-sec);line-height:1.4}
+.news-time{font-size:10px;color:var(--text-ter);margin-top:4px}
+.news-action{
+margin-top:8px;padding:6px 14px;border-radius:8px;font-size:11px;font-weight:700;
+background:var(--accent);color:#fff;border:none;cursor:pointer;display:inline-block;
+}
+.news-action:active{transform:scale(0.95)}
+
+.chat-msg{display:flex;gap:8px;align-items:flex-end;max-width:85%}
+.chat-msg.them{align-self:flex-start}
+.chat-msg.me{align-self:flex-end;flex-direction:row-reverse}
+.chat-msg-avatar{width:28px;height:28px;border-radius:50%;overflow:hidden;flex-shrink:0;background:var(--card)}
+.chat-msg-avatar img{width:100%;height:100%;object-fit:cover}
+.chat-bubble{
+padding:10px 14px;border-radius:16px;font-size:13px;line-height:1.4;
+}
+.chat-msg.them .chat-bubble{background:rgba(255,255,255,0.08);border-bottom-left-radius:4px;color:var(--text)}
+.chat-msg.me .chat-bubble{background:var(--accent);border-bottom-right-radius:4px;color:#fff}
+.chat-bubble-name{font-size:10px;font-weight:700;color:var(--accent-light);margin-bottom:2px}
+.chat-bubble-time{font-size:9px;color:var(--text-ter);margin-top:3px;text-align:right}
+.chat-msg.me .chat-bubble-time{color:rgba(255,255,255,0.5)}
+
+.chat-input-bar{
+position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+width:100%;max-width:390px;padding:10px 16px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0));
+background:rgba(20,24,38,0.97);border-top:1px solid rgba(255,255,255,0.06);
+display:flex;gap:8px;align-items:center;z-index:10;
+backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.chat-input{
+flex:1;padding:10px 16px;border-radius:20px;background:rgba(255,255,255,0.06);
+border:1px solid rgba(255,255,255,0.08);color:var(--text);font-size:13px;
+outline:none;min-height:40px;
+}
+.chat-input::placeholder{color:var(--text-ter)}
+.chat-send-btn{
+width:40px;height:40px;border-radius:50%;background:var(--accent);
+display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;
+color:#fff;font-size:18px;flex-shrink:0;
+}
+.chat-send-btn:active{transform:scale(0.9)}
+</style>
+</head>
+<body>
+<div id="app">
+<div id="splash" class="screen active">
+<div class="splash-logo">&#9889;</div>
+<div class="splash-title">FRANQ QUIZ</div>
+<div class="splash-tagline">Acesse. Ofere&#231;a. Realize.</div>
+<div class="splash-bar-wrap"><div class="splash-bar" id="splashBar"></div></div>
+</div>
+
+<div id="login" class="screen">
+<div class="login-logo">
+<div class="login-logo-icon">&#9889;</div>
+<div class="login-title">Entrar</div>
+<div class="login-sub">Entre para come&#231;ar a jogar</div>
+</div>
+<div class="login-field">
+<label>Nome</label>
+<input type="text" id="loginName" placeholder="Seu nome completo" autocomplete="off">
+</div>
+<div class="login-field">
+<label>Cargo</label>
+<input type="text" id="loginRole" placeholder="Personal Banker" value="Personal Banker">
+</div>
+<div class="login-error" id="loginError"></div>
+<button class="btn-primary" onclick="doLogin()">ENTRAR</button>
+</div>
+
+<div id="home" class="screen with-nav"></div>
+<div id="topics" class="screen with-nav"></div>
+<div id="matchmaking" class="screen"></div>
+<div id="gameplay" class="screen"></div>
+<div id="results" class="screen"></div>
+<div id="leaderboard" class="screen with-nav"></div>
+<div id="profile" class="screen with-nav"></div>
+<div id="settings" class="screen"></div>
+<div id="chat" class="screen"></div>
+
+<div class="bottom-nav" id="bottomNav">
+<div class="nav-items">
+<button class="nav-item" data-tab="home" onclick="showScreen('home')">
+<span class="nav-icon"><img src="design/img/menu_inicio.svg" alt=""></span>In&#237;cio
+</button>
+<button class="nav-item" data-tab="topics" onclick="showScreen('topics')">
+<span class="nav-icon"><img src="design/img/menu_topicos.svg" alt=""></span>T&#243;picos
+</button>
+<button class="nav-item" data-tab="leaderboard" onclick="showScreen('leaderboard')">
+<span class="nav-icon"><img src="design/img/menu_ranking.svg" alt=""></span>Ranking
+</button>
+<button class="nav-item" data-tab="profile" onclick="showScreen('profile')">
+<span class="nav-icon"><img src="design/img/menu_perfil.svg" alt=""></span>Perfil
+</button>
+</div>
+</div>
+
+<div class="challenge-overlay" id="challengeOverlay">
+<div class="challenge-sheet" id="challengeSheet"></div>
+</div>
+</div>
+
+<script>
+// ====== DATA LAYER ======
+const QUESTIONS={
+mercado:[
+{q:"Qual índice é o principal termômetro da Bolsa de Valores brasileira?",a:["Ibovespa","S&P 500","Dow Jones","IFIX"],e:"O Ibovespa é o principal indicador de desempenho das ações negociadas na B3, composto pelas ações mais negociadas e representativas do mercado brasileiro.",d:1},
+{q:"O que significa a sigla CDI?",a:["Certificado de Depósito Interbancário","Crédito Direto ao Investidor","Custo de Dívida Interna","Central de Dados de Investimento"],e:"O CDI é um título emitido entre bancos para empréstimos de curtíssimo prazo, e sua taxa serve como referência para diversos investimentos de renda fixa.",d:1},
+{q:"Qual órgão regula o mercado de valores mobiliários no Brasil?",a:["CVM","Banco Central","ANBIMA","B3"],e:"A Comissão de Valores Mobiliários (CVM) é a autarquia federal responsável por regulamentar e fiscalizar o mercado de capitais brasileiro.",d:1},
+{q:"O que é o spread bancário?",a:["Diferença entre taxa de captação e empréstimo","Taxa de administração de fundos","Imposto sobre operações financeiras","Margem de lucro em câmbio"],e:"O spread bancário representa a diferença entre os juros que o banco paga para captar recursos e os juros que cobra nos empréstimos.",d:2},
+{q:"Qual taxa é definida pelo COPOM a cada 45 dias?",a:["Taxa Selic","Taxa CDI","Taxa TR","Taxa DI"],e:"O Comitê de Política Monetária (COPOM) se reúne a cada 45 dias para definir a meta da taxa Selic, principal instrumento de política monetária do país.",d:1},
+{q:"O que representa o índice IFIX?",a:["Fundos Imobiliários","Inflação","Fundos de Investimento","Índice Fiscal"],e:"O IFIX é o índice que mede o desempenho médio dos Fundos de Investimento Imobiliário (FIIs) mais negociados na B3.",d:2},
+{q:"Qual a função principal do Banco Central do Brasil?",a:["Garantir estabilidade do poder de compra da moeda","Definir políticas fiscais","Regular o mercado de ações","Administrar a B3"],e:"O Banco Central tem como missão principal garantir a estabilidade do poder de compra da moeda e a solidez do sistema financeiro nacional.",d:2},
+{q:"O que é marcação a mercado?",a:["Atualizar o valor do ativo pelo preço atual","Registrar a compra de uma ação","Definir o preço de IPO","Calcular o lucro de um fundo"],e:"Marcação a mercado (MtM) é a atualização diária do valor de um ativo financeiro pelo seu preço de mercado atual, refletindo ganhos ou perdas em tempo real.",d:3},
+{q:"O que é um IPO?",a:["Oferta Pública Inicial de ações","Índice de Preços ao Operador","Imposto Proporcional às Operações","Investimento Privado Organizado"],e:"IPO (Initial Public Offering) é o processo pelo qual uma empresa abre seu capital ao público, vendendo ações pela primeira vez na bolsa de valores.",d:2},
+{q:"Qual a principal diferença entre mercado primário e secundário?",a:["Primário: emissão nova; Secundário: negociação entre investidores","Primário: renda fixa; Secundário: renda variável","Primário: grandes valores; Secundário: pequenos valores","Primário: nacional; Secundário: internacional"],e:"No mercado primário, títulos são emitidos pela primeira vez e os recursos vão para o emissor. No secundário, investidores negociam entre si títulos já existentes.",d:3}
+],
+investimentos:[
+{q:"Qual é a principal característica de um CDB?",a:["Título de renda fixa emitido por bancos","Ação de empresa listada","Fundo de investimento multimercado","Título público federal"],e:"O CDB (Certificado de Depósito Bancário) é um título de renda fixa emitido por bancos para captar recursos, oferecendo rentabilidade pré ou pós-fixada.",d:1},
+{q:"O que é o FGC e qual seu limite de cobertura por CPF/instituição?",a:["Fundo Garantidor de Créditos — R$250 mil","Fundo Geral de Compensação — R$500 mil","Fundo de Garantia do Contribuinte — R$100 mil","Fundo Garantidor Compensatório — R$1 milhão"],e:"O FGC protege investidores em caso de falência de instituições financeiras, cobrindo até R$250 mil por CPF por instituição.",d:1},
+{q:"Qual a diferença entre LCI e LCA?",a:["LCI: lastro imobiliário; LCA: lastro agrícola","LCI: isenta de IR; LCA: paga IR","LCI: para PJ; LCA: para PF","LCI: longo prazo; LCA: curto prazo"],e:"Ambas são isentas de IR para PF. A LCI tem lastro em créditos imobiliários e a LCA em créditos do agronegócio.",d:2},
+{q:"O que é um fundo multimercado?",a:["Fundo que investe em diversas classes de ativos","Fundo exclusivo de ações","Fundo que só investe em renda fixa","Fundo de previdência privada"],e:"Fundos multimercado têm liberdade para investir em renda fixa, variável, câmbio e derivativos, buscando diversificação e retorno superior.",d:1},
+{q:"Qual a vantagem tributária de LCI e LCA para pessoa física?",a:["Isenção de Imposto de Renda","Isenção de IOF","Alíquota reduzida de IR","Cashback do imposto pago"],e:"LCI e LCA são isentas de Imposto de Renda para pessoas físicas, o que torna sua rentabilidade líquida mais competitiva.",d:1},
+{q:"O que são debêntures?",a:["Títulos de dívida emitidos por empresas","Ações preferenciais de bancos","Contratos futuros de commodities","Títulos públicos municipais"],e:"Debêntures são títulos de dívida que empresas emitem para captar recursos de investidores, pagando juros como remuneração.",d:2},
+{q:"Qual tipo de fundo é obrigado a investir pelo menos 67% em ações?",a:["Fundo de Ações","Fundo Multimercado","Fundo de Renda Fixa","Fundo Cambial"],e:"Por regulamentação da CVM, fundos classificados como 'Ações' devem manter no mínimo 67% do patrimônio líquido em ações.",d:2},
+{q:"O que é come-cotas?",a:["Antecipação semestral de IR em fundos","Taxa de administração","Taxa de performance","Imposto sobre dividendos"],e:"O come-cotas é a antecipação do IR sobre rendimentos de fundos, cobrada automaticamente em maio e novembro, reduzindo o número de cotas.",d:3},
+{q:"Qual título público é indexado à inflação?",a:["Tesouro IPCA+","Tesouro Selic","Tesouro Prefixado","Tesouro Cambial"],e:"O Tesouro IPCA+ paga uma taxa fixa mais a variação do IPCA, protegendo o investidor da inflação e garantindo ganho real.",d:2},
+{q:"O que é o prazo de carência em um investimento?",a:["Período mínimo antes de permitir resgate","Prazo para pagamento de taxas","Tempo para liquidação do ativo","Prazo de validade do investimento"],e:"A carência é o período durante o qual o investidor não pode resgatar sua aplicação, garantindo previsibilidade ao emissor do título.",d:1}
+],
+compliance:[
+{q:"O que significa KYC no contexto bancário?",a:["Know Your Customer","Keep Your Cash","Key Yield Certificate","Know Your Capital"],e:"KYC é o processo de verificação da identidade e perfil dos clientes, exigido por regulamentações de prevenção à lavagem de dinheiro.",d:1},
+{q:"Qual lei brasileira trata sobre lavagem de dinheiro?",a:["Lei 9.613/1998","Lei 6.404/1976","Lei 4.595/1964","Lei 10.406/2002"],e:"A Lei 9.613/1998 tipifica o crime de lavagem de dinheiro e criou o COAF para combater ilícitos financeiros no Brasil.",d:2},
+{q:"O que é PLD no contexto bancário?",a:["Prevenção à Lavagem de Dinheiro","Programa de Liquidez Diária","Plano de Desenvolvimento Local","Política de Limites e Depósitos"],e:"PLD abrange todas as políticas e procedimentos que instituições financeiras adotam para detectar e prevenir operações de lavagem de dinheiro.",d:1},
+{q:"Qual órgão é responsável pelo COAF?",a:["Banco Central do Brasil","CVM","Receita Federal","Polícia Federal"],e:"O COAF (Conselho de Controle de Atividades Financeiras) está vinculado ao Banco Central e analisa comunicações de operações suspeitas.",d:2},
+{q:"O que é suitability?",a:["Avaliação de adequação do produto ao perfil do investidor","Liquidez de um ativo","Risco de crédito de uma operação","Rentabilidade esperada de um investimento"],e:"Suitability garante que o produto financeiro oferecido seja adequado ao perfil de risco, objetivos e conhecimento do investidor.",d:2},
+{q:"A partir de qual valor uma operação em espécie deve ser reportada ao COAF?",a:["R$50.000","R$10.000","R$100.000","R$25.000"],e:"Operações em espécie acima de R$50.000 devem ser comunicadas ao COAF, independentemente de suspeita de irregularidade.",d:3},
+{q:"O que é a LGPD?",a:["Lei Geral de Proteção de Dados","Lei de Garantias e Proteções ao Depositante","Lei Geral de Prevenção de Danos","Legislação de Gestão de Patrimônio Digital"],e:"A LGPD (Lei 13.709/2018) regula o tratamento de dados pessoais no Brasil, exigindo consentimento e garantindo direitos aos titulares.",d:1},
+{q:"O que é o perfil de investidor conservador?",a:["Prioriza segurança e baixo risco","Aceita alto risco por maiores retornos","Investe somente em ações","Não se importa com liquidez"],e:"O investidor conservador prioriza a preservação do capital e prefere investimentos de baixo risco, como renda fixa e Tesouro Selic.",d:1},
+{q:"O que é API (Análise de Perfil do Investidor)?",a:["Questionário para identificar perfil de risco do cliente","Interface de programação para sistemas bancários","Análise de Performance de Investimentos","Avaliação de Produtos e Indexadores"],e:"A API é o questionário obrigatório que instituições financeiras aplicam para classificar o perfil de risco do cliente antes de oferecer produtos.",d:2},
+{q:"Qual o prazo para comunicação de operações suspeitas ao COAF?",a:["Até 24 horas após a conclusão da operação","Até 48 horas","Até 5 dias úteis","Até 30 dias"],e:"Instituições financeiras devem comunicar operações suspeitas ao COAF em até 24 horas após a identificação, conforme a regulamentação vigente.",d:3}
+],
+atendimento:[
+{q:"Qual a primeira etapa do atendimento consultivo ao cliente?",a:["Entender as necessidades e objetivos do cliente","Apresentar os produtos disponíveis","Fechar a venda imediatamente","Enviar uma proposta por email"],e:"O atendimento consultivo começa pela escuta ativa e compreensão dos objetivos do cliente, antes de qualquer oferta de produto.",d:1},
+{q:"O que é cross-selling no atendimento bancário?",a:["Oferecer produtos complementares ao cliente","Vender produtos de outros bancos","Transferir o cliente para outro atendente","Cancelar produtos não utilizados"],e:"Cross-selling é a estratégia de oferecer produtos que complementam o que o cliente já possui, aumentando o relacionamento e a receita.",d:1},
+{q:"Qual a importância do rapport no atendimento?",a:["Criar conexão e confiança com o cliente","Acelerar o processo de venda","Reduzir o tempo de atendimento","Simplificar a documentação"],e:"Rapport é a técnica de criar empatia e conexão genuína com o cliente, fundamental para construir relacionamentos de longo prazo.",d:2},
+{q:"O que é NPS (Net Promoter Score)?",a:["Métrica de satisfação e lealdade do cliente","Novo Programa de Serviços","Nota de Performance do Sistema","Nível de Produtividade de Serviços"],e:"O NPS mede a probabilidade de um cliente recomendar a empresa, classificando-os como promotores, neutros ou detratores.",d:2},
+{q:"Qual a melhor prática ao lidar com uma reclamação de cliente?",a:["Ouvir atentamente, demonstrar empatia e buscar solução","Transferir imediatamente para o gerente","Oferecer desconto para compensar","Explicar que a culpa não é do banco"],e:"A escuta ativa com empatia valida o sentimento do cliente e cria espaço para uma resolução efetiva e satisfatória.",d:1},
+{q:"O que significa jornada do cliente?",a:["Todas as interações do cliente com a instituição","O caminho físico do cliente na agência","O histórico de investimentos do cliente","O processo de abertura de conta"],e:"A jornada do cliente mapeia todos os pontos de contato, desde o primeiro interesse até o pós-venda, identificando oportunidades de melhoria.",d:2},
+{q:"Qual técnica de venda envolve fazer perguntas para entender a dor do cliente?",a:["SPIN Selling","Cold Calling","Hard Selling","Flash Sale"],e:"SPIN Selling usa perguntas de Situação, Problema, Implicação e Necessidade para descobrir as reais dores do cliente.",d:3},
+{q:"O que é up-selling?",a:["Oferecer uma versão superior do produto ao cliente","Vender para novos clientes","Reduzir o preço para fechar a venda","Oferecer produtos de terceiros"],e:"Up-selling é a técnica de oferecer uma versão premium ou mais completa do produto que o cliente já está considerando.",d:2},
+{q:"Qual canal de atendimento tem crescido mais nos últimos anos?",a:["Digital (app e internet banking)","Atendimento telefônico","Agência física","Correspondente bancário"],e:"O canal digital supera todos os outros em crescimento, impulsionado pela praticidade do mobile banking e pela pandemia.",d:1},
+{q:"O que é CRM no contexto bancário?",a:["Customer Relationship Management","Central de Registro Monetário","Controle de Risco de Mercado","Certificado de Rentabilidade Mensal"],e:"CRM é o sistema que centraliza dados e interações do cliente, permitindo atendimento personalizado e gestão eficiente do relacionamento.",d:1}
+],
+cambio:[
+{q:"O que é a taxa PTAX?",a:["Média das cotações de câmbio do dia calculada pelo BC","Taxa de juros para operações internacionais","Imposto sobre transferências internacionais","Preço de transferência entre bancos"],e:"A PTAX é a taxa de câmbio de referência calculada pelo Banco Central, baseada na média das cotações do mercado interbancário.",d:2},
+{q:"Qual a diferença entre câmbio comercial e câmbio turismo?",a:["Comercial: operações de comércio exterior; Turismo: compra/venda para viagens","Comercial: dólar americano; Turismo: euro","Comercial: grandes volumes; Turismo: isenção de IOF","Não há diferença"],e:"O câmbio comercial é usado em operações de comércio exterior e investimentos. O turismo inclui custos operacionais adicionais para pequenos volumes.",d:1},
+{q:"O que é IOF em operações de câmbio?",a:["Imposto sobre Operações Financeiras","Índice de Operações Futuras","Instrução Operacional Financeira","Imposto Obrigatório Federal"],e:"O IOF é um imposto federal que incide sobre diversas operações financeiras, incluindo câmbio, crédito e seguros.",d:1},
+{q:"O que é um hedge cambial?",a:["Proteção contra variação cambial","Investimento em moeda estrangeira","Empréstimo internacional","Arbitragem de moedas"],e:"Hedge cambial é uma estratégia financeira para proteger operações da volatilidade do câmbio, usando contratos futuros ou opções.",d:2},
+{q:"Qual o limite para envio de remessas sem necessidade de contrato de câmbio formal?",a:["Até USD 3.000 por operação","Até USD 1.000","Até USD 10.000","Sem limite"],e:"Remessas de até USD 3.000 podem ser feitas por canais simplificados, sem a necessidade de contrato de câmbio formal.",d:3},
+{q:"O que é SWIFT no contexto de câmbio?",a:["Sistema de mensagens para transferências bancárias internacionais","Taxa cobrada em operações cambiais","Índice de conversão de moedas","Sistema de câmbio do Banco Central"],e:"O SWIFT é a rede global que permite a comunicação segura entre bancos para processar transferências internacionais.",d:2},
+{q:"O que significa ACC (Adiantamento sobre Contrato de Câmbio)?",a:["Financiamento antecipado de exportação","Antecipação de câmbio para importação","Operação de proteção cambial","Adiantamento de lucros em moeda estrangeira"],e:"O ACC é uma linha de crédito pré-embarque que antecipa ao exportador os recursos em reais antes do envio da mercadoria.",d:3},
+{q:"Qual a alíquota de IOF para compra de moeda estrangeira em espécie?",a:["1,1%","6,38%","0,38%","3,5%"],e:"A alíquota de IOF para compra de moeda em espécie é de 1,1%, enquanto operações com cartão de crédito internacional têm alíquota diferente.",d:3},
+{q:"O que é câmbio pronto (spot)?",a:["Operação com liquidação em até 2 dias úteis","Operação com liquidação futura","Operação com taxa fixa","Operação sem IOF"],e:"No câmbio spot, a liquidação ocorre em até D+2 (dois dias úteis), sendo o tipo mais comum de operação no mercado à vista.",d:2},
+{q:"O que é o mercado de câmbio futuro?",a:["Mercado onde se negocia compra/venda de moeda para data futura","Mercado de criptomoedas","Mercado de câmbio paralelo","Mercado de moedas digitais do BC"],e:"No mercado de câmbio futuro, as partes acordam comprar ou vender moeda a uma taxa fixa para liquidação em data futura específica.",d:2}
+],
+previdencia:[
+{q:"Qual a diferença entre PGBL e VGBL?",a:["PGBL deduz do IR; VGBL tributa só o rendimento","PGBL é para PJ; VGBL é para PF","PGBL tem maior rentabilidade","Não há diferença tributária"],e:"No PGBL, as contribuições podem ser deduzidas do IR até 12% da renda bruta. No VGBL, o IR incide apenas sobre os rendimentos no resgate.",d:1},
+{q:"Para quem o PGBL é mais indicado?",a:["Quem faz declaração completa do IR","Quem faz declaração simplificada","Quem é isento de IR","Todos os investidores igualmente"],e:"O PGBL beneficia quem usa a declaração completa do IR, pois permite deduzir até 12% da renda bruta, reduzindo a base de cálculo.",d:2},
+{q:"O que é tabela regressiva de IR em previdência?",a:["Alíquota diminui com o tempo de aplicação","Alíquota aumenta com o valor investido","Alíquota fixa de 15%","Alíquota definida pelo INSS"],e:"Na tabela regressiva, a alíquota de IR diminui de 35% para 10% conforme o tempo de permanência do investimento, incentivando aplicações de longo prazo.",d:2},
+{q:"Qual o limite de dedução do PGBL no Imposto de Renda?",a:["Até 12% da renda bruta anual","Até 20%","Até R$50.000 por ano","Sem limite"],e:"A legislação permite deduzir contribuições ao PGBL até o limite de 12% da renda bruta tributável anual na declaração do IR.",d:1},
+{q:"O que é portabilidade em previdência privada?",a:["Transferir o plano para outra instituição sem resgate","Resgatar e reinvestir em outro banco","Mudar de PGBL para VGBL","Alterar o perfil de risco do plano"],e:"A portabilidade permite transferir os recursos entre planos ou instituições sem necessidade de resgate, evitando incidência de IR.",d:2},
+{q:"Qual a menor alíquota na tabela regressiva?",a:["10% após 10 anos","15% após 8 anos","20% após 6 anos","0% após 12 anos"],e:"Após 10 anos de aplicação, a alíquota de IR na tabela regressiva atinge o mínimo de 10%, a menor prevista em lei.",d:3},
+{q:"O que é período de diferimento na previdência?",a:["Fase de acumulação antes da aposentadoria","Prazo de carência para resgate","Período sem cobrança de taxas","Fase de recebimento do benefício"],e:"O diferimento é a fase em que o participante faz aportes e acumula recursos, antes de iniciar o recebimento do benefício.",d:2},
+{q:"Quais taxas são comuns em planos de previdência?",a:["Taxa de administração e taxa de carregamento","Taxa de custódia e corretagem","Taxa de performance e taxa SELIC","Taxa única de adesão"],e:"A taxa de administração remunera a gestão do fundo, enquanto a taxa de carregamento incide sobre aportes ou resgates.",d:2},
+{q:"O que é a fase de benefício na previdência?",a:["Quando o participante começa a receber a renda","Quando o participante faz aportes","Quando o plano atinge a rentabilidade alvo","Quando o imposto é reduzido"],e:"A fase de benefício é quando o participante encerra a acumulação e passa a receber renda mensal ou resgate do valor acumulado.",d:1},
+{q:"Em caso de falecimento, o VGBL entra em inventário?",a:["Não, o VGBL não entra em inventário","Sim, sempre entra em inventário","Depende do valor acumulado","Depende da idade do titular"],e:"O VGBL é classificado como seguro de pessoas e, por isso, os recursos são transferidos diretamente aos beneficiários sem inventário.",d:3}
+],
+rendafixa:[
+{q:"O que caracteriza um investimento de renda fixa?",a:["Regras de remuneração definidas no momento da aplicação","Rendimento atrelado à bolsa de valores","Garantia de rentabilidade acima da inflação","Isenção total de impostos"],e:"Na renda fixa, as condições de remuneração (taxa, indexador, prazo) são estabelecidas no momento da aplicação, trazendo previsibilidade.",d:1},
+{q:"Qual a diferença entre títulos prefixados e pós-fixados?",a:["Prefixado: taxa definida; Pós-fixado: atrelado a indexador","Prefixado: mais arriscado; Pós-fixado: sem risco","Prefixado: longo prazo; Pós-fixado: curto prazo","Não há diferença prática"],e:"No prefixado, você sabe exatamente o retorno se levar até o vencimento. No pós-fixado, o retorno acompanha um indexador como CDI ou IPCA.",d:1},
+{q:"O que é duration em renda fixa?",a:["Prazo médio ponderado dos fluxos de caixa do título","Prazo de vencimento do título","Tempo mínimo para resgate","Período de carência"],e:"A duration mede a sensibilidade do preço de um título às variações nas taxas de juros — quanto maior a duration, maior a volatilidade.",d:3},
+{q:"Qual o risco principal de um título prefixado?",a:["Risco de mercado (variação das taxas de juros)","Risco de crédito","Risco de liquidez","Risco cambial"],e:"Títulos prefixados perdem valor quando as taxas de juros sobem, pois novos títulos passam a oferecer retornos maiores.",d:2},
+{q:"O que é Tesouro Selic?",a:["Título público pós-fixado atrelado à taxa Selic","Título privado emitido pelo Banco Central","Fundo de investimento do governo","CDB do Tesouro Nacional"],e:"O Tesouro Selic é o título público mais conservador, com rentabilidade que acompanha a taxa Selic e alta liquidez.",d:1},
+{q:"Qual a tabela regressiva de IR para renda fixa?",a:["22,5% até 180 dias; 15% acima de 720 dias","25% até 365 dias; 10% acima de 720 dias","20% fixo","15% fixo"],e:"A tabela regressiva de IR vai de 22,5% (até 180 dias) a 15% (acima de 720 dias), incentivando investimentos de longo prazo.",d:3},
+{q:"O que é CRI (Certificado de Recebíveis Imobiliários)?",a:["Título de renda fixa lastreado em créditos imobiliários","Certificado de registro de imóvel","Contrato de renda de imóvel","Crédito rotativo imobiliário"],e:"O CRI é um título securitizado que transforma créditos imobiliários em ativos negociáveis, geralmente isento de IR para pessoa física.",d:2},
+{q:"O que acontece quando há marcação a mercado negativa em renda fixa?",a:["O preço do título cai, gerando perda se vendido antes do vencimento","O título é automaticamente resgatado","O investidor recebe menos juros","O FGC cobre a diferença"],e:"A marcação negativa reflete uma queda no valor de mercado do título, resultando em prejuízo apenas se o investidor vender antes do vencimento.",d:3},
+{q:"O que é risco de crédito em renda fixa?",a:["Risco do emissor não honrar o pagamento","Risco de variação de preço do título","Risco de inflação corroer o rendimento","Risco de não conseguir vender o título"],e:"O risco de crédito é a possibilidade de o emissor não pagar os juros ou o principal, sendo maior em emissores com rating mais baixo.",d:2},
+{q:"Qual título é ideal para reserva de emergência?",a:["Tesouro Selic","Tesouro IPCA+ 2035","CDB de 5 anos","Debênture de infraestrutura"],e:"O Tesouro Selic é ideal para reserva de emergência por ter liquidez diária, baixa volatilidade e rendimento atrelado à Selic.",d:1}
+],
+rendavariavel:[
+{q:"O que é uma ação ordinária (ON)?",a:["Ação que dá direito a voto nas assembleias","Ação que paga mais dividendos","Ação sem risco de mercado","Ação emitida pelo governo"],e:"Ações ordinárias (ON, código 3) garantem direito a voto nas assembleias de acionistas, dando poder de participação nas decisões da empresa.",d:1},
+{q:"O que são dividendos?",a:["Parte do lucro distribuída aos acionistas","Taxas cobradas pela corretora","Juros pagos sobre títulos públicos","Bônus de IPO"],e:"Dividendos são a parcela do lucro líquido que a empresa distribui aos acionistas, proporcionalmente ao número de ações detidas.",d:1},
+{q:"O que é um FII (Fundo de Investimento Imobiliário)?",a:["Fundo que investe em ativos imobiliários","Financiamento de imóvel individual","Fundo de infraestrutura industrial","Fórum de investidores imobiliários"],e:"FIIs são fundos que investem em imóveis ou ativos imobiliários, distribuindo rendimentos mensais isentos de IR para pessoas físicas.",d:1},
+{q:"O que significa operar vendido ou short selling?",a:["Vender ativo que não possui apostando na queda","Vender ações com desconto","Encerrar posição em um fundo","Vender apenas ações preferenciais"],e:"Short selling é a venda de ativos alugados, apostando que o preço cairá para recomprar mais barato e devolver ao dono, lucrando com a diferença.",d:3},
+{q:"Qual a diferença entre análise técnica e análise fundamentalista?",a:["Técnica: gráficos e padrões; Fundamentalista: indicadores financeiros","Técnica: longo prazo; Fundamentalista: curto prazo","Técnica: renda fixa; Fundamentalista: renda variável","Não há diferença prática"],e:"A análise técnica estuda padrões de preço e volume em gráficos. A fundamentalista avalia saúde financeira, lucros e perspectivas da empresa.",d:2},
+{q:"O que é o índice P/L (Preço/Lucro)?",a:["Relação entre preço da ação e lucro por ação","Preço do lote de ações","Proporção de liquidez do ativo","Percentual de lucratividade anual"],e:"O P/L indica quantos anos de lucro seriam necessários para pagar o investimento na ação, sendo uma métrica de valuation popular.",d:2},
+{q:"O que são ETFs?",a:["Fundos que replicam índices negociados em bolsa","Empréstimos de títulos fiscais","Estratégias de trading financeiro","Empresas de tecnologia financeira"],e:"ETFs (Exchange-Traded Funds) são fundos que replicam a composição de índices e são negociados em bolsa como ações, com baixas taxas.",d:2},
+{q:"Qual a tributação padrão sobre ganho de capital em ações (operações comuns)?",a:["15% sobre o lucro","20% sobre o lucro","10% sobre o lucro","Isento de imposto"],e:"Em operações comuns (swing trade), o IR sobre ganho de capital em ações é de 15%, com isenção para vendas até R$20 mil/mês.",d:2},
+{q:"O que é o circuit breaker na bolsa?",a:["Paralisação das negociações após queda acentuada","Momento de abertura do pregão","Sistema de proteção contra hackers","Limite de compras por investidor"],e:"O circuit breaker interrompe as negociações quando o Ibovespa cai 10% ou 15%, dando tempo para o mercado se acalmar.",d:3},
+{q:"O que é tag along?",a:["Direito dos minoritários em caso de venda do controle","Taxa de saída de um fundo","Identificação de ações por código","Bônus por tempo de investimento"],e:"Tag along protege acionistas minoritários, garantindo que recebam pelo menos 80% do valor pago ao controlador em caso de venda da empresa.",d:3}
+]
+};
+
+const TOPICS_META={
+mercado:{name:"Tópico Surpresa",icon:"\u2753",svgIcon:"design/img/icon_surpresa.svg",homeOrder:0},
+investimentos:{name:"Consórcios",icon:"\u{1F91D}",svgIcon:"design/img/icon_consorcio.svg",homeOrder:1},
+compliance:{name:"Compliance",icon:"\u2696\uFE0F",svgIcon:"design/img/icon_compliance.svg",homeOrder:2},
+atendimento:{name:"Home Equity",icon:"\u{1F4B0}",svgIcon:"design/img/icon_he.svg",homeOrder:3},
+cambio:{name:"Crédito Imobiliário",icon:"\u{1F3E0}",svgIcon:"design/img/icon_ci.svg",homeOrder:4},
+previdencia:{name:"Auto",icon:"\u{1F697}",svgIcon:"design/img/icon_auto.svg",homeOrder:5},
+rendafixa:{name:"Renda Fixa",icon:"\u{1F4C8}",svgIcon:null,homeOrder:6},
+rendavariavel:{name:"Renda Variável",icon:"\u{1F4C9}",svgIcon:null,homeOrder:7}
+};
+
+const OPPONENTS=[
+{name:"Francisco Tavares",role:"Personal Banker",avatar:"\u{1F469}\u200D\u{1F4BC}",photo:"design/img/profile_francisco.jpg",rankTitle:"Nivel Pro"},
+{name:"Karen Lopes",role:"Personal Banker",avatar:"\u{1F468}\u200D\u{1F4BC}",photo:"design/img/profile_karen.jpg",rankTitle:"Nivel Pro"},
+{name:"Marcio Godoy",role:"Analista de Investimentos",avatar:"\u{1F469}\u200D\u{1F4BB}",photo:"design/img/profile_marcio.jpg",rankTitle:"Nivel Senior"},
+{name:"Rafael Costa",role:"Assessor Financeiro",avatar:"\u{1F9D1}\u200D\u{1F4BC}",photo:null,rankTitle:"Nivel Pro"},
+{name:"Juliana Lima",role:"Personal Banker",avatar:"\u{1F469}\u200D\u{1F9B0}",photo:null,rankTitle:"Nivel II"},
+{name:"Pedro Almeida",role:"Gerente de Carteira",avatar:"\u{1F468}\u200D\u{1F9B1}",photo:null,rankTitle:"Nivel Senior"},
+{name:"Fernanda Rocha",role:"Especialista Private",avatar:"\u{1F469}\u200D\u{1F3EB}",photo:null,rankTitle:"Nivel Pro"},
+{name:"Lucas Mendes",role:"Personal Banker",avatar:"\u{1F468}\u200D\u{1F4BB}",photo:null,rankTitle:"Nivel II"},
+{name:"Beatriz Ferreira",role:"Analista de Compliance",avatar:"\u{1F469}\u200D\u2696\uFE0F",photo:null,rankTitle:"Nivel Pro"},
+{name:"Thiago Souza",role:"Consultor de Câmbio",avatar:"\u{1F9D1}\u200D\u2708\uFE0F",photo:null,rankTitle:"Nivel Senior"}
+];
+
+const RANKS=[
+{minLevel:1,title:"Estagiário Franq",emoji:"\u{1F393}",color:"#8290EF"},
+{minLevel:2,title:"Assessor",emoji:"\u{1F4CB}",color:"#687BEA"},
+{minLevel:3,title:"Especialista",emoji:"\u{1F4BC}",color:"#3B82F6"},
+{minLevel:4,title:"Sênior",emoji:"\u2B50",color:"#10B981"},
+{minLevel:5,title:"Master Franq",emoji:"\u{1F451}",color:"#FFD700"},
+{minLevel:7,title:"Lenda Franq",emoji:"\u{1F3C6}",color:"#FF6B35"}
+];
+
+const MEDAL_DEFS=[
+{icon:"\u{1F3AF}",name:"Primeira Vitória",check:function(s){return s.wins>=1}},
+{icon:"\u{1F525}",name:"5 Vitórias",check:function(s){return s.wins>=5}},
+{icon:"\u2B50",name:"10 Partidas",check:function(s){return s.gamesPlayed>=10}},
+{icon:"\u{1F48E}",name:"500 Pontos",check:function(s){return s.totalPoints>=500}},
+{icon:"\u{1F451}",name:"Nível 5",check:function(s){return s.level>=5}},
+{icon:"\u{1F3C6}",name:"Partida Perfeita",check:function(s){return s.hasPerfectMatch}},
+{icon:"\u{1F396}\uFE0F",name:"Top 3 Ranking",check:function(s){var p=getPlayerLeaderboardPos('geral');return p>=1&&p<=3}},
+{icon:"\u{1F4B0}",name:"100 Moedas",check:function(s){return s.coins>=100}},
+{icon:"\u{1F525}",name:"Streak 7 Dias",check:function(s){return s.streak.count>=7}},
+{icon:"\u26A1",name:"Combo x3",check:function(s){return s.hasComboX3}}
+];
+
+const MISSION_POOL=[
+{id:"win1",name:"Vencer 1 partida",icon:"\u{1F3C6}",target:1,key:"dailyWins"},
+{id:"combo5",name:"Combo de 5 acertos",icon:"\u{1F525}",target:5,key:"dailyMaxCombo"},
+{id:"play2",name:"Jogar 2 partidas",icon:"\u{1F3AE}",target:2,key:"dailyPlayed"},
+{id:"perfect",name:"Partida perfeita (5/5)",icon:"\u2B50",target:1,key:"dailyPerfects"},
+{id:"correct8",name:"8 respostas corretas",icon:"\u2705",target:8,key:"dailyCorrects"}
+];
+
+// ====== STATE MANAGEMENT ======
+var state;
+function defaultState(){
+return{
+name:"",role:"Personal Banker",avatar:"\u{1F9D1}\u200D\u{1F4BC}",photo:"design/img/profile_picture.jpg",
+level:1,xp:0,coins:50,totalPoints:0,
+wins:0,gamesPlayed:0,
+hasPerfectMatch:false,hasComboX3:false,
+streak:{count:0,lastDate:null},
+settings:{sfx:true,music:false,vibration:true,notifications:true,privateProfile:false},
+topicStats:{},
+dailyMissions:[],dailyMissionDate:null,
+dailyWins:0,dailyPlayed:0,dailyCorrects:0,dailyMaxCombo:0,dailyPerfects:0,
+dailyAllComplete:false,
+leaderboard:null,lbResetDate:null,
+tutorialSeen:false
+};
+}
+function loadState(){
+try{
+var s=localStorage.getItem('franqQuizV3');
+if(s){state=JSON.parse(s);if(state.tutorialSeen===undefined)state.tutorialSeen=false;if(!state.photo)state.photo="design/img/profile_picture.jpg";return true}
+}catch(e){}
+state=defaultState();
+return false;
+}
+function saveState(){try{localStorage.setItem('franqQuizV3',JSON.stringify(state))}catch(e){}}
+
+// ====== AUDIO ENGINE ======
+var audioCtx=null;
+function initAudio(){
+if(!audioCtx){
+try{audioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}
+}
+if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume();
+}
+function playTone(freq,dur,type,gain,freqEnd){
+if(!state||!state.settings.sfx||!audioCtx)return;
+type=type||'sine';gain=gain||0.15;
+try{
+var o=audioCtx.createOscillator();
+var g=audioCtx.createGain();
+o.type=type;
+o.frequency.setValueAtTime(freq,audioCtx.currentTime);
+if(freqEnd)o.frequency.linearRampToValueAtTime(freqEnd,audioCtx.currentTime+dur/1000);
+g.gain.setValueAtTime(gain,audioCtx.currentTime);
+g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+dur/1000);
+o.connect(g);g.connect(audioCtx.destination);
+o.start();o.stop(audioCtx.currentTime+dur/1000);
+}catch(e){}
+}
+function sfxClick(){playTone(800,30,'sine',0.15)}
+function sfxCorrect(){playTone(523,150,'sine',0.2,784)}
+function sfxWrong(){playTone(400,200,'sawtooth',0.15,200)}
+function sfxTimerWarn(){playTone(880,100,'square',0.2)}
+function sfxCountdown(){playTone(600,80,'sine',0.15)}
+function sfxVictory(){
+playTone(523,100,'sine',0.2);
+setTimeout(function(){playTone(659,100,'sine',0.2)},120);
+setTimeout(function(){playTone(784,100,'sine',0.2)},240);
+}
+function sfxDefeat(){
+playTone(784,150,'sine',0.15);
+setTimeout(function(){playTone(659,150,'sine',0.15)},170);
+setTimeout(function(){playTone(523,150,'sine',0.15)},340);
+}
+function sfxPowerup(){playTone(400,200,'sine',0.2,1200)}
+function sfxCombo(n){playTone(600+n*100,100,'sine',0.15)}
+
+// ====== HAPTICS ======
+function vibrate(pattern){
+if(!state||!state.settings.vibration)return;
+try{if(navigator.vibrate)navigator.vibrate(pattern)}catch(e){}
+}
+
+// ====== UTILITY ======
+function shuffle(arr){
+var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a;
+}
+function getRank(level){
+var r=RANKS[0];
+for(var i=0;i<RANKS.length;i++){if(level>=RANKS[i].minLevel)r=RANKS[i]}
+return r;
+}
+function xpForLevel(lv){return Math.round(100*Math.pow(1.3,lv-1))}
+function getPlayerLeaderboardPos(filter){
+var lb=buildLeaderboard(filter);
+for(var i=0;i<lb.length;i++){if(lb[i].isPlayer)return i+1}
+return 999;
+}
+function todayStr(){return new Date().toISOString().slice(0,10)}
+
+function selectQuestionsForMatch(topicKey){
+var all=QUESTIONS[topicKey].slice();
+var easy=shuffle(all.filter(function(q){return q.d===1}));
+var med=shuffle(all.filter(function(q){return q.d===2}));
+var hard=shuffle(all.filter(function(q){return q.d===3}));
+var selected=[];
+function pick(pool,count){
+var c=0;
+while(c<count&&pool.length>0){selected.push(pool.pop());c++}
+}
+pick(easy,2);
+pick(med,2);
+pick(hard,1);
+while(selected.length<5){
+if(med.length>0)selected.push(med.pop());
+else if(easy.length>0)selected.push(easy.pop());
+else if(hard.length>0)selected.push(hard.pop());
+else break;
+}
+selected.sort(function(a,b){return a.d-b.d});
+return selected;
+}
+
+// ====== LEADERBOARD DATA ======
+function generateLeaderboard(){
+var names=["Francisco Tavares","Karen Lopes","Marcio Godoy","Rafael Costa","Juliana Lima",
+"Pedro Almeida","Fernanda Rocha","Lucas Mendes","Beatriz Ferreira","Thiago Souza",
+"Gabriel Nunes","Isabela Cruz","Matheus Ribeiro","Camila Dias","Rodrigo Pinto",
+"Larissa Moura","Felipe Araújo","Amanda Teixeira","Bruno Cardoso","Patrícia Vieira"];
+var lb=names.map(function(n,i){
+var opp=OPPONENTS.find(function(o){return o.name===n});
+return{
+name:n,avatar:opp?opp.avatar:OPPONENTS[i%OPPONENTS.length].avatar,
+points:Math.floor(Math.random()*1800+100),isPlayer:false,
+topicPoints:{}
+};
+});
+var topicKeys=Object.keys(TOPICS_META);
+lb.forEach(function(e){
+topicKeys.forEach(function(t){e.topicPoints[t]=Math.floor(Math.random()*200+10)});
+});
+state.leaderboard=lb;
+state.lbResetDate=getNextMonday();
+saveState();
+}
+function getNextMonday(){
+var d=new Date();d.setDate(d.getDate()+(7-d.getDay()+1)%7||7);d.setHours(0,0,0,0);
+return d.getTime();
+}
+function buildLeaderboard(filter){
+if(!state.leaderboard)generateLeaderboard();
+var lb=state.leaderboard.map(function(e){return Object.assign({},e)});
+var playerEntry={
+name:state.name,avatar:state.avatar,
+points:filter==='geral'?state.totalPoints:(state.topicStats[filter]?state.topicStats[filter].points:0)||0,
+isPlayer:true,topicPoints:{}
+};
+Object.keys(TOPICS_META).forEach(function(t){
+playerEntry.topicPoints[t]=state.topicStats[t]?state.topicStats[t].points:0;
+});
+if(filter!=='geral'){
+lb.forEach(function(e){e.points=e.topicPoints[filter]||0});
+playerEntry.points=(state.topicStats[filter]?state.topicStats[filter].points:0)||0;
+}else{
+playerEntry.points=state.totalPoints;
+}
+lb.push(playerEntry);
+lb.sort(function(a,b){return b.points-a.points});
+return lb.slice(0,20);
+}
+
+// ====== DAILY MISSIONS ======
+function checkDailyMissions(){
+var today=todayStr();
+if(state.dailyMissionDate!==today){
+state.dailyMissionDate=today;
+state.dailyWins=0;state.dailyPlayed=0;state.dailyCorrects=0;
+state.dailyMaxCombo=0;state.dailyPerfects=0;state.dailyAllComplete=false;
+var pool=shuffle(MISSION_POOL);
+state.dailyMissions=pool.slice(0,3).map(function(m){return m.id});
+saveState();
+}
+}
+function getMissionProgress(m){
+return Math.min(state[m.key]||0,m.target);
+}
+function allMissionsComplete(){
+return state.dailyMissions.every(function(id){
+var m=MISSION_POOL.find(function(x){return x.id===id});
+return getMissionProgress(m)>=m.target;
+});
+}
+
+// ====== NAVIGATION ======
+var currentScreen='splash';
+var navScreens=['home','topics','leaderboard','profile'];
+
+function showScreen(id){
+sfxClick();vibrate(30);
+var screens=document.querySelectorAll('.screen');
+for(var i=0;i<screens.length;i++)screens[i].classList.remove('active');
+document.getElementById(id).classList.add('active');
+var nav=document.getElementById('bottomNav');
+if(navScreens.indexOf(id)>=0){
+nav.classList.add('visible');
+var items=document.querySelectorAll('.nav-item');
+for(var i=0;i<items.length;i++)items[i].classList.toggle('active',items[i].dataset.tab===id);
+}else{
+nav.classList.remove('visible');
+}
+currentScreen=id;
+if(id==='home')renderHome();
+if(id==='topics')renderTopics();
+if(id==='leaderboard')renderLeaderboard();
+if(id==='profile')renderProfile();
+if(id==='settings')renderSettings();
+if(id==='chat')renderChat();
+}
+
+// ====== TUTORIAL ======
+var tutorialStep=0;
+function showTutorial(){
+tutorialStep=0;
+renderTutorialStep();
+}
+function renderTutorialStep(){
+var steps=[
+{icon:"\u{1F4DA}",title:"Bem-vindo ao Franq Quiz!",desc:"Escolha um tópico e enfrente um oponente em 5 rodadas de perguntas."},
+{icon:"\u23F1\uFE0F",title:"Responda Rápido!",desc:"Quanto mais rápido, mais pontos. Acerte seguidas para combos!"},
+{icon:"\u{1F3C6}",title:"Suba de Nível!",desc:"Use power-ups, suba de nível e conquiste o topo do ranking!"}
+];
+var s=steps[tutorialStep];
+var isLast=tutorialStep===steps.length-1;
+var dots='';
+for(var i=0;i<steps.length;i++){
+dots+='<div class="tutorial-dot'+(i===tutorialStep?' active':'')+'"></div>';
+}
+var overlay=document.createElement('div');
+overlay.className='tutorial-overlay';
+overlay.id='tutorialOverlay';
+overlay.innerHTML='<div class="tutorial-card">'+
+'<div class="tutorial-step-dots">'+dots+'</div>'+
+'<div class="tutorial-icon">'+s.icon+'</div>'+
+'<div class="tutorial-title">'+s.title+'</div>'+
+'<div class="tutorial-desc">'+s.desc+'</div>'+
+'<button class="tutorial-btn" onclick="nextTutorialStep()">'+(isLast?'Vamos jogar!':'Próximo')+'</button>'+
+'</div>';
+var existing=document.getElementById('tutorialOverlay');
+if(existing)existing.remove();
+document.body.appendChild(overlay);
+}
+function nextTutorialStep(){
+tutorialStep++;
+if(tutorialStep>=3){
+var el=document.getElementById('tutorialOverlay');
+if(el)el.remove();
+state.tutorialSeen=true;
+saveState();
+}else{
+renderTutorialStep();
+}
+}
+
+// ====== SPLASH ======
+function runSplash(){
+var pct=0;
+var bar=document.getElementById('splashBar');
+var iv=setInterval(function(){
+pct+=2;bar.style.width=pct+'%';
+if(pct>=100){clearInterval(iv);setTimeout(function(){
+if(loadState()&&state.name){showScreen('home')}
+else{state=defaultState();showScreen('login')}
+},400)}
+},50);
+}
+
+// ====== LOGIN ======
+function doLogin(){
+var name=document.getElementById('loginName').value.trim();
+var role=document.getElementById('loginRole').value.trim()||'Personal Banker';
+var err=document.getElementById('loginError');
+if(!name){err.textContent='Por favor, insira seu nome.';return}
+err.textContent='';
+if(!loadState()||!state.name){state=defaultState()}
+state.name=name;state.role=role;
+saveState();
+sfxClick();
+showScreen('home');
+if(!state.tutorialSeen)showTutorial();
+}
+
+// ====== HOME ======
+function renderHome(){
+checkDailyMissions();
+var rank=getRank(state.level);
+var topicKeys=Object.keys(TOPICS_META);
+topicKeys.sort(function(a,b){return(TOPICS_META[a].homeOrder||0)-(TOPICS_META[b].homeOrder||0)});
+var homeTopics=topicKeys.filter(function(k){return TOPICS_META[k].svgIcon});
+var lb=buildLeaderboard('geral');
+var topRanking=lb.slice(0,3);
+var playerPos=0;
+for(var i=0;i<lb.length;i++){if(lb[i].isPlayer){playerPos=i+1;break}}
+
+var profilePhoto=state.photo?'<img src="'+state.photo+'" alt="">':state.avatar;
+var rankLabel='Nível '+toRoman(state.level);
+
+var topicsHtml=homeTopics.map(function(key){
+var t=TOPICS_META[key];
+return '<div class="topic-card-home" onclick="startMatch(\''+key+'\')">'+
+'<div class="topic-bg"><img src="design/img/small_button.png" alt=""></div>'+
+'<div class="topic-content">'+
+'<img class="topic-icon-img" src="'+t.svgIcon+'" alt="'+t.name+'">'+
+'<div class="topic-name">'+t.name+'</div>'+
+'</div>'+
+'</div>';
+}).join('');
+
+var rankingHtml=topRanking.map(function(e,i){
+var opp=OPPONENTS.find(function(o){return o.name===e.name});
+var photoHtml=opp&&opp.photo?'<img src="'+opp.photo+'" alt="">':'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:18px;background:linear-gradient(135deg,var(--accent),#8B5CF6)">'+e.avatar+'</div>';
+var roleLabel=opp?opp.role+' | '+(opp.rankTitle||''):'';
+var medalCount=i<3?3-i:0;
+var medalHtml='';
+for(var m=0;m<medalCount;m++){medalHtml+='<img src="design/img/medal.svg" alt="">';}
+return '<div class="ranking-row'+(e.isPlayer?' me':'')+'">'+
+'<div class="ranking-pos">'+(i+1)+'</div>'+
+'<div class="ranking-medals">'+medalHtml+'</div>'+
+'<div class="ranking-avatar">'+photoHtml+'</div>'+
+'<div class="ranking-info">'+
+'<div class="ranking-name">'+e.name+'</div>'+
+'<div class="ranking-role">'+roleLabel+'</div>'+
+'</div>'+
+'<div class="ranking-score">'+e.points+'</div>'+
+'<button class="ranking-challenge-btn" onclick="event.stopPropagation();challengeFromRanking(\''+e.name+'\')">DESAFIAR</button>'+
+'</div>';
+}).join('');
+
+var playerInTop=playerPos<=3;
+var playerRowHtml='';
+if(!playerInTop){
+playerRowHtml='<div class="ranking-row me">'+
+'<div class="ranking-pos">'+playerPos+'</div>'+
+'<div class="ranking-medals"></div>'+
+'<div class="ranking-avatar">'+(state.photo?'<img src="'+state.photo+'" alt="">':'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:18px;background:linear-gradient(135deg,var(--accent),#8B5CF6)">'+state.avatar+'</div>')+'</div>'+
+'<div class="ranking-info">'+
+'<div class="ranking-name">Você</div>'+
+'<div class="ranking-role">'+state.role+' | '+rankLabel+'</div>'+
+'</div>'+
+'<div class="ranking-score">'+state.totalPoints+'</div>'+
+'<div style="width:62px"></div>'+
+'</div>';
+}
+
+document.getElementById('home').innerHTML=
+'<div class="home-header anim-fiu">'+
+'<div class="home-profile" onclick="showScreen(\'settings\')" style="cursor:pointer">'+
+'<div class="avatar">'+profilePhoto+'</div>'+
+'<div>'+
+'<div class="home-name">'+state.name+'</div>'+
+'<div class="home-role">'+state.role+' | '+rankLabel+'</div>'+
+'</div>'+
+'</div>'+
+'<div class="home-actions">'+
+'<button class="chat-btn" onclick="showScreen(\'chat\')"><img src="design/img/chat_button.svg" alt="Chat"></button>'+
+'</div>'+
+'</div>'+
+'<div class="play-buttons anim-fiu" style="animation-delay:.1s">'+
+'<button class="play-btn" onclick="quickPlay()">'+
+'<div class="play-bg"><img src="design/img/big_button.png" alt=""></div>'+
+'<div class="play-content">'+
+'<img class="play-icon-img" src="design/img/icon_jogar.svg" alt="Jogar">'+
+'<div class="play-label">JOGAR</div>'+
+'<div class="play-sub">Partida rápida</div>'+
+'</div>'+
+'</button>'+
+'<button class="play-btn" onclick="openChallenge()">'+
+'<div class="play-bg"><img src="design/img/big_button.png" alt=""></div>'+
+'<div class="play-content">'+
+'<img class="play-icon-img" src="design/img/icon_desafiar.svg" alt="Desafiar">'+
+'<div class="play-label">DESAFIAR</div>'+
+'<div class="play-sub">Escolha um oponente</div>'+
+'</div>'+
+'</button>'+
+'</div>'+
+'<div class="anim-fiu" style="animation-delay:.2s">'+
+'<div class="section-header">'+
+'<div class="section-title">Tópicos</div>'+
+'<button class="section-link" onclick="showScreen(\'topics\')">Ver todos \u2192</button>'+
+'</div>'+
+'<div class="topics-grid-home">'+topicsHtml+'</div>'+
+'</div>'+
+'<div class="anim-fiu" style="animation-delay:.3s">'+
+'<div class="section-header">'+
+'<div class="section-title">Ranking</div>'+
+'<button class="section-link" onclick="showScreen(\'leaderboard\')">Ver todos \u2192</button>'+
+'</div>'+
+'<div class="ranking-list">'+rankingHtml+playerRowHtml+'</div>'+
+'</div>';
+}
+
+function toRoman(num){
+var vals=[10,9,5,4,1];
+var syms=['X','IX','V','IV','I'];
+var r='';
+for(var i=0;i<vals.length;i++){while(num>=vals[i]){r+=syms[i];num-=vals[i]}}
+return r;
+}
+
+function challengeFromRanking(name){
+var opp=OPPONENTS.find(function(o){return o.name===name});
+if(opp){
+var topicKey=shuffle(Object.keys(TOPICS_META))[0];
+startMatch(topicKey,opp);
+}else{
+openChallenge();
+}
+}
+
+function claimFlameToken(){
+state.coins+=25;state.dailyAllComplete=true;saveState();
+sfxVictory();vibrate(50);renderHome();
+}
+
+// ====== TOPICS ======
+function renderTopics(){
+var topicKeys=Object.keys(TOPICS_META);
+topicKeys.sort(function(a,b){return(TOPICS_META[a].homeOrder||0)-(TOPICS_META[b].homeOrder||0)});
+var gridHtml=topicKeys.map(function(key){
+var t=TOPICS_META[key];
+var ts=state.topicStats[key]||{points:0,played:0};
+var iconHtml=t.svgIcon?'<img class="topic-icon-img" src="'+t.svgIcon+'" alt="'+t.name+'">':'<div class="topic-icon">'+t.icon+'</div>';
+var bgHtml=t.svgIcon?'<div class="topic-bg"><img src="design/img/small_button.png" alt=""></div>':'';
+var fallbackStyle=t.svgIcon?'':'style="background:var(--card);border:1px solid var(--card-border);border-radius:var(--r-card);padding:16px 10px"';
+return '<div class="topic-card anim-fiu" onclick="startMatch(\''+key+'\')" '+fallbackStyle+'>'+
+bgHtml+
+'<div class="topic-content">'+
+iconHtml+
+'<div class="topic-name">'+t.name+'</div>'+
+'<div class="topic-meta">'+(ts.points||0)+' pts \u00B7 '+(ts.played||0)+' jogos</div>'+
+'</div>'+
+'</div>';
+}).join('');
+document.getElementById('topics').innerHTML=
+'<div class="topics-header">'+
+'<button class="back-btn" onclick="showScreen(\'home\')">\u2190</button>'+
+'<div class="screen-title">Tópicos</div>'+
+'</div>'+
+'<div class="topics-grid">'+gridHtml+'</div>';
+}
+
+// ====== CHALLENGE ======
+function openChallenge(){
+sfxClick();
+var overlay=document.getElementById('challengeOverlay');
+var sheet=document.getElementById('challengeSheet');
+var opps=shuffle(OPPONENTS).slice(0,5);
+var oppsHtml=opps.map(function(o){
+var photoHtml=o.photo?'<img src="'+o.photo+'" alt="">':o.avatar;
+return '<div class="challenge-opponent">'+
+'<div class="avatar sm">'+photoHtml+'</div>'+
+'<div class="challenge-opponent-info">'+
+'<div class="challenge-opponent-name">'+o.name+'</div>'+
+'<div class="challenge-opponent-role">'+o.role+'</div>'+
+'</div>'+
+'<button class="challenge-fight-btn" onclick="challengeStart(\''+o.name+'\')">DESAFIAR</button>'+
+'</div>';
+}).join('');
+sheet.innerHTML=
+'<div class="challenge-title">\u2694\uFE0F Escolha seu Oponente</div>'+
+oppsHtml+
+'<button class="challenge-close" onclick="closeChallenge()">Cancelar</button>';
+overlay.classList.add('show');
+}
+function closeChallenge(){document.getElementById('challengeOverlay').classList.remove('show')}
+function challengeStart(oppName){
+closeChallenge();
+var opp=OPPONENTS.find(function(o){return o.name===oppName});
+var topicKey=shuffle(Object.keys(TOPICS_META))[0];
+startMatch(topicKey,opp);
+}
+
+// ====== QUICK PLAY ======
+function quickPlay(){
+var topicKey=shuffle(Object.keys(TOPICS_META))[0];
+startMatch(topicKey);
+}
+
+// ====== MATCHMAKING ======
+var matchTimeout;
+function startMatch(topicKey,forceOpp){
+if(topicKey==='mercado'){topicKey=shuffle(Object.keys(TOPICS_META).filter(function(k){return k!=='mercado'}))[0]}
+var topic=TOPICS_META[topicKey];
+var opponent=forceOpp||shuffle(OPPONENTS)[0];
+showScreen('matchmaking');
+var el=document.getElementById('matchmaking');
+var playerPhotoHtml=state.photo?'<img src="'+state.photo+'" alt="">':state.avatar;
+el.innerHTML=
+'<div class="match-topic anim-fi">'+topic.name+'</div>'+
+'<div class="match-vs anim-fi">'+
+'<div class="match-player">'+
+'<div class="avatar lg">'+playerPhotoHtml+'</div>'+
+'<div class="match-player-name">'+state.name+'</div>'+
+'<div class="match-player-role">'+state.role+'</div>'+
+'</div>'+
+'<div class="vs-text">VS</div>'+
+'<div class="match-player" id="matchOpp">'+
+'<div class="avatar lg" style="background:rgba(255,255,255,0.1)">?</div>'+
+'<div class="match-player-name">???</div>'+
+'<div class="match-player-role">Buscando...</div>'+
+'</div>'+
+'</div>'+
+'<div class="match-status" id="matchStatus">Buscando oponente<span id="dots">...</span></div>'+
+'<button class="match-cancel" id="matchCancel" onclick="cancelMatch()">Cancelar</button>';
+var dotCount=0;
+var dotIv=setInterval(function(){
+dotCount=(dotCount+1)%4;
+var d=document.getElementById('dots');
+if(d){var s='';for(var i=0;i<=dotCount;i++)s+='.';d.textContent=s}
+},400);
+
+matchTimeout=setTimeout(function(){
+clearInterval(dotIv);
+vibrate(100);
+var oppPhotoHtml=opponent.photo?'<img src="'+opponent.photo+'" alt="">':opponent.avatar;
+document.getElementById('matchOpp').innerHTML=
+'<div class="avatar lg anim-bi">'+oppPhotoHtml+'</div>'+
+'<div class="match-player-name anim-fiu">'+opponent.name+'</div>'+
+'<div class="match-player-role anim-fiu">'+opponent.role+'</div>';
+document.getElementById('matchStatus').textContent='Oponente encontrado!';
+document.getElementById('matchCancel').style.display='none';
+setTimeout(function(){startCountdown(topicKey,opponent)},1000);
+},2000);
+}
+
+function cancelMatch(){
+clearTimeout(matchTimeout);
+showScreen('home');
+}
+
+function startCountdown(topicKey,opponent){
+var el=document.getElementById('matchStatus');
+var count=3;
+el.innerHTML='<div class="match-countdown">'+count+'</div>';
+sfxCountdown();
+var iv=setInterval(function(){
+count--;
+if(count>0){
+el.innerHTML='<div class="match-countdown">'+count+'</div>';
+sfxCountdown();
+}else{
+clearInterval(iv);
+el.innerHTML='<div class="match-countdown" style="font-size:36px">VAI!</div>';
+sfxClick();
+setTimeout(function(){beginGame(topicKey,opponent)},500);
+}
+},1000);
+}
+
+// ====== GAMEPLAY ======
+var game={};
+var timerRAF=null;
+
+function beginGame(topicKey,opponent){
+var qs=selectQuestionsForMatch(topicKey);
+game={
+topic:topicKey,
+topicMeta:TOPICS_META[topicKey],
+opponent:opponent,
+questions:qs,
+round:0,
+playerScore:0,
+opponentScore:0,
+combo:0,
+maxCombo:0,
+correctCount:0,
+powerups:{tempo:false,fiftyFifty:false,double:false},
+matchDouble:false,
+answered:false,
+timeLeft:10,
+timerWarnPlayed:false,
+quit:false,
+roundHistory:[]
+};
+showScreen('gameplay');
+showRoundOverlay(game.round+1,function(){playRound()});
+}
+
+function showRoundOverlay(roundNum,cb){
+var ov=document.createElement('div');
+ov.className='round-overlay';
+ov.innerHTML='<div class="round-overlay-text">Rodada '+roundNum+'</div>';
+document.body.appendChild(ov);
+setTimeout(function(){
+ov.style.opacity='0';ov.style.transition='opacity .3s';
+setTimeout(function(){ov.remove();if(cb)cb()},300);
+},800);
+}
+
+function playRound(){
+game.answered=false;
+game.matchDouble=false;
+game.timerWarnPlayed=false;
+game.timeLeft=10;
+var q=game.questions[game.round];
+var isR5=game.round===4;
+
+var correct=q.a[0];
+var shuffled=shuffle(q.a);
+var correctIdx=shuffled.indexOf(correct);
+game.currentCorrectIdx=correctIdx;
+game.currentShuffled=shuffled;
+game.currentQuestion=q;
+
+var letters=['A','B','C','D'];
+var totalScore=game.playerScore+game.opponentScore||1;
+var pBar=Math.round(game.playerScore/totalScore*100);
+var oBar=100-pBar;
+var isHot=game.topicMeta.hot;
+
+var answersHtml=shuffled.map(function(a,i){
+return '<button class="answer-btn anim-fiu" style="animation-delay:'+(i*0.06)+'s" onclick="selectAnswer('+i+')" id="ans'+i+'">'+
+'<span class="letter">'+letters[i]+'</span><span>'+a+'</span>'+
+'</button>';
+}).join('');
+
+var comboDots='';
+for(var i=1;i<=5;i++){comboDots+='<div class="combo-dot'+(i<=game.combo?' active':'')+'"></div>'}
+var comboMult='';
+if(game.combo>=4)comboMult='x3';
+else if(game.combo>=3)comboMult='x2';
+else if(game.combo>=2)comboMult='x1.5';
+
+document.getElementById('gameplay').innerHTML=
+'<div class="game-topbar">'+
+'<div class="game-topic">'+game.topicMeta.icon+' '+game.topicMeta.name+'</div>'+
+'<div class="game-round">Rodada '+(game.round+1)+'/5'+(isR5?' \u2B502x':'')+(isHot?' \u{1F525}2x':'')+'</div>'+
+'<button class="game-quit" onclick="quitGame()">Sair</button>'+
+'</div>'+
+'<div class="game-scores">'+
+'<div class="game-player">'+
+'<div class="avatar sm">'+state.avatar+'</div>'+
+'<div>'+
+'<div class="game-player-name">'+state.name+'</div>'+
+'<div class="game-player-score" id="pScore">'+game.playerScore+'</div>'+
+'</div>'+
+'</div>'+
+'<div class="game-player right">'+
+'<div class="avatar sm">'+game.opponent.avatar+'</div>'+
+'<div>'+
+'<div class="game-player-name">'+game.opponent.name+'</div>'+
+'<div class="game-player-score" id="oScore">'+game.opponentScore+'</div>'+
+'</div>'+
+'</div>'+
+'</div>'+
+'<div class="score-bar-wrap">'+
+'<div class="score-bar-left" style="width:'+pBar+'%"></div>'+
+'<div class="score-bar-right" style="width:'+oBar+'%"></div>'+
+'</div>'+
+'<div class="timer-bar-wrap" id="timerWrap"><div class="timer-bar green" id="timerBar" style="width:100%"></div></div>'+
+'<div class="timer-number green" id="timerNum">10.0</div>'+
+'<div class="question-text anim-fiu">'+q.q+'</div>'+
+'<div class="answers" id="answersDiv">'+answersHtml+'</div>'+
+'<div id="explanationArea"></div>'+
+'<div class="powerups" id="powerupsDiv">'+
+'<button class="powerup-btn'+(game.powerups.tempo?' used':state.coins<10?' locked':'')+'" id="puTempo" onclick="usePowerup(\'tempo\')">'+
+'<span class="pu-icon">\u23F1\uFE0F</span>Tempo Extra<br><span class="pu-cost">10 \u{1FA99}</span>'+
+'</button>'+
+'<button class="powerup-btn'+(game.powerups.fiftyFifty?' used':state.coins<15?' locked':'')+'" id="puFifty" onclick="usePowerup(\'fiftyFifty\')">'+
+'<span class="pu-icon">\u2702\uFE0F</span>50/50<br><span class="pu-cost">15 \u{1FA99}</span>'+
+'</button>'+
+'<button class="powerup-btn'+(game.powerups.double?' used':state.coins<20?' locked':'')+'" id="puDouble" onclick="usePowerup(\'double\')">'+
+'<span class="pu-icon">2\uFE0F\u20E3</span>Pontos x2<br><span class="pu-cost">20 \u{1FA99}</span>'+
+'</button>'+
+'</div>'+
+'<div class="combo-indicator" id="comboInd">'+
+comboDots+(comboMult?'<div class="combo-badge">'+comboMult+'</div>':'')+
+'</div>';
+startTimer();
+}
+
+function startTimer(){
+if(timerRAF)cancelAnimationFrame(timerRAF);
+var lastTime=performance.now();
+function timerLoop(now){
+if(game.answered)return;
+var dt=(now-lastTime)/1000;
+lastTime=now;
+game.timeLeft=Math.max(0,game.timeLeft-dt);
+var pct=(game.timeLeft/10)*100;
+var bar=document.getElementById('timerBar');
+var num=document.getElementById('timerNum');
+var wrap=document.getElementById('timerWrap');
+if(!bar)return;
+bar.style.width=pct+'%';
+num.textContent=game.timeLeft.toFixed(1);
+if(pct>50){bar.className='timer-bar green';num.className='timer-number green';if(wrap)wrap.classList.remove('timer-danger')}
+else if(pct>25){bar.className='timer-bar yellow';num.className='timer-number yellow';if(wrap)wrap.classList.remove('timer-danger')}
+else{bar.className='timer-bar red';num.className='timer-number red';if(wrap)wrap.classList.add('timer-danger')}
+if(game.timeLeft<=3&&!game.timerWarnPlayed){game.timerWarnPlayed=true;sfxTimerWarn()}
+if(game.timeLeft<=0){
+game.answered=true;
+timeUp();
+return;
+}
+timerRAF=requestAnimationFrame(timerLoop);
+}
+timerRAF=requestAnimationFrame(timerLoop);
+}
+
+function timeUp(){
+game.combo=0;
+highlightCorrect();
+sfxWrong();vibrate([50,30,50]);
+showExplanation();
+game.roundHistory.push({q:game.currentQuestion,chosen:-1,correctIdx:game.currentCorrectIdx,shuffled:game.currentShuffled,wasCorrect:false});
+aiAnswer();
+setTimeout(nextRound,2000);
+}
+
+function selectAnswer(idx){
+if(game.answered)return;
+game.answered=true;
+if(timerRAF)cancelAnimationFrame(timerRAF);
+sfxClick();vibrate(30);
+
+var isCorrect=idx===game.currentCorrectIdx;
+var btn=document.getElementById('ans'+idx);
+
+if(isCorrect){
+btn.classList.add('correct');
+sfxCorrect();
+game.combo++;
+if(game.combo>game.maxCombo)game.maxCombo=game.combo;
+if(game.maxCombo>=3)state.hasComboX3=true;
+game.correctCount++;
+state.dailyCorrects++;
+sfxCombo(game.combo);
+
+var pts=Math.max(5,Math.round(game.timeLeft*2));
+if(game.combo>=4)pts=Math.round(pts*3);
+else if(game.combo>=3)pts=Math.round(pts*2);
+else if(game.combo>=2)pts=Math.round(pts*1.5);
+if(game.round===4)pts*=2;
+if(game.topicMeta.hot)pts*=2;
+if(game.matchDouble)pts*=2;
+
+game.playerScore+=pts;
+state.coins+=2;
+document.getElementById('pScore').textContent=game.playerScore;
+}else{
+btn.classList.add('wrong');
+game.combo=0;
+sfxWrong();vibrate([50,30,50]);
+highlightCorrect();
+}
+
+for(var i=0;i<4;i++){
+var b=document.getElementById('ans'+i);
+if(b&&i!==idx&&i!==game.currentCorrectIdx)b.classList.add('dimmed');
+}
+
+var pus=document.querySelectorAll('.powerup-btn');
+for(var i=0;i<pus.length;i++)pus[i].classList.add('used');
+
+updateComboDisplay();
+showExplanation();
+game.roundHistory.push({q:game.currentQuestion,chosen:idx,correctIdx:game.currentCorrectIdx,shuffled:game.currentShuffled,wasCorrect:isCorrect});
+aiAnswer();
+setTimeout(nextRound,2000);
+}
+
+function highlightCorrect(){
+var btn=document.getElementById('ans'+game.currentCorrectIdx);
+if(btn)btn.classList.add('correct');
+}
+
+function showExplanation(){
+var area=document.getElementById('explanationArea');
+if(!area)return;
+var q=game.currentQuestion;
+if(q&&q.e){
+area.innerHTML='<div class="explanation-card"><strong>\u{1F4A1} Sabia?</strong> '+q.e+'</div>';
+}
+}
+
+function aiAnswer(){
+var aiCorrect=Math.random()<0.55;
+if(aiCorrect){
+var pts=Math.floor(Math.random()*15+5);
+game.opponentScore+=pts;
+var el=document.getElementById('oScore');
+if(el)el.textContent=game.opponentScore;
+}
+}
+
+function updateComboDisplay(){
+var ind=document.getElementById('comboInd');
+if(!ind)return;
+var mult='';
+if(game.combo>=4)mult='x3';
+else if(game.combo>=3)mult='x2';
+else if(game.combo>=2)mult='x1.5';
+var dots='';
+for(var i=1;i<=5;i++){dots+='<div class="combo-dot'+(i<=game.combo?' active':'')+'"></div>'}
+ind.innerHTML=dots+(mult?'<div class="combo-badge">'+mult+'</div>':'');
+}
+
+function nextRound(){
+game.round++;
+if(game.round>=5){
+endMatch();
+}else{
+showRoundOverlay(game.round+1,function(){playRound()});
+}
+}
+
+function usePowerup(type){
+if(game.answered)return;
+if(type==='tempo'&&!game.powerups.tempo&&state.coins>=10){
+game.powerups.tempo=true;state.coins-=10;
+game.timeLeft=Math.min(15,game.timeLeft+5);
+sfxPowerup();vibrate(50);
+document.getElementById('puTempo').classList.add('used');
+}else if(type==='fiftyFifty'&&!game.powerups.fiftyFifty&&state.coins>=15){
+game.powerups.fiftyFifty=true;state.coins-=15;
+sfxPowerup();vibrate(50);
+document.getElementById('puFifty').classList.add('used');
+var removed=0;
+for(var i=0;i<4&&removed<2;i++){
+if(i!==game.currentCorrectIdx){
+var b=document.getElementById('ans'+i);
+if(b){b.classList.add('removed');removed++}
+}
+}
+}else if(type==='double'&&!game.powerups.double&&state.coins>=20){
+game.powerups.double=true;game.matchDouble=true;state.coins-=20;
+sfxPowerup();vibrate(50);
+document.getElementById('puDouble').classList.add('used');
+}
+saveState();
+}
+
+function quitGame(){
+if(timerRAF)cancelAnimationFrame(timerRAF);
+game.quit=true;
+state.gamesPlayed++;state.dailyPlayed++;
+saveState();
+showScreen('home');
+}
+
+// ====== END MATCH / RESULTS ======
+function endMatch(){
+if(timerRAF)cancelAnimationFrame(timerRAF);
+state.gamesPlayed++;state.dailyPlayed++;
+
+var won=game.playerScore>game.opponentScore;
+var draw=game.playerScore===game.opponentScore;
+var perfect=game.correctCount===5;
+
+if(perfect){state.hasPerfectMatch=true;state.dailyPerfects++}
+if(game.maxCombo>state.dailyMaxCombo)state.dailyMaxCombo=game.maxCombo;
+
+var rewardPts=0,rewardCoins=0;
+var rewards=[];
+
+rewardPts+=50;rewardCoins+=10;
+rewards.push({label:'Conclusão da partida',pts:50,coins:10});
+
+if(won){
+rewardPts+=50;rewardCoins+=5;
+rewards.push({label:'Bônus de vitória',pts:50,coins:5});
+state.wins++;state.dailyWins++;
+var today=todayStr();
+if(state.streak.lastDate){
+var last=new Date(state.streak.lastDate);
+var now=new Date(today);
+var diff=Math.round((now-last)/(1000*60*60*24));
+if(diff===1)state.streak.count++;
+else if(diff>1)state.streak.count=1;
+}else{state.streak.count=1}
+state.streak.lastDate=today;
+if(state.streak.count===7){rewardCoins+=50;rewards.push({label:'Bônus streak 7 dias!',pts:0,coins:50})}
+}
+
+if(perfect){
+rewardPts+=50;rewardCoins+=2;
+rewards.push({label:'Partida perfeita (5/5)',pts:50,coins:2});
+}
+
+if(game.maxCombo>=3){
+var comboPts=game.maxCombo*10;
+rewardPts+=comboPts;
+rewards.push({label:'Bônus combo (max '+game.maxCombo+')',pts:comboPts,coins:0});
+}
+
+var totalPts=game.playerScore+rewardPts;
+state.totalPoints+=totalPts;
+state.coins+=rewardCoins;
+
+if(!state.topicStats[game.topic])state.topicStats[game.topic]={points:0,played:0};
+state.topicStats[game.topic].points+=totalPts;
+state.topicStats[game.topic].played++;
+
+var oldLevel=state.level;
+state.xp+=totalPts;
+while(state.xp>=xpForLevel(state.level)){
+state.xp-=xpForLevel(state.level);
+state.level++;
+state.coins+=10;
+}
+
+saveState();
+
+showScreen('results');
+var resultType=won?'win':draw?'draw':'loss';
+var bannerText=won?'VITÓRIA!':draw?'EMPATE':'DERROTA';
+var rank=getRank(state.level);
+var xpNeeded=xpForLevel(state.level);
+var xpPct=Math.round(state.xp/xpNeeded*100);
+
+if(won)sfxVictory();else sfxDefeat();
+if(won)spawnConfetti();
+
+var rewardsHtml=rewards.map(function(r){
+return '<div class="reward-row">'+
+'<span class="reward-label">'+r.label+'</span>'+
+'<span class="reward-val">'+(r.pts?'+'+r.pts+' pts':'')+(r.pts&&r.coins?' \u00B7 ':'')+(r.coins?'+'+r.coins+' \u{1FA99}':'')+'</span>'+
+'</div>';
+}).join('');
+
+var reviewBtnHtml='<button class="review-toggle" onclick="toggleReview()" id="reviewToggle">\u{1F4D6} Revisar Perguntas</button>';
+
+document.getElementById('results').innerHTML=
+'<div class="result-banner '+resultType+' anim-bi">'+bannerText+'</div>'+
+'<div class="result-score-compare anim-fiu">'+
+'<span style="color:var(--accent)" id="animPlayerScore">0</span>'+
+'<span class="vs-x">VS</span>'+
+'<span style="color:var(--flame)" id="animOppScore">0</span>'+
+'</div>'+
+'<div class="card rewards-list anim-fiu" style="animation-delay:.1s">'+
+'<div class="section-title">\u{1F4CB} Recompensas</div>'+
+rewardsHtml+
+'<div class="reward-row" style="border-top:1px solid rgba(255,255,255,0.08);padding-top:10px;margin-top:4px">'+
+'<span class="reward-label" style="font-weight:700;color:var(--text)">Pontos da partida</span>'+
+'<span class="reward-val" style="font-size:15px">+'+game.playerScore+' pts</span>'+
+'</div>'+
+'</div>'+
+'<div class="result-coins anim-fiu" style="animation-delay:.2s"><span class="coin-bounce">\u{1FA99}</span> '+state.coins+' moedas</div>'+
+'<div class="xp-section anim-fiu" style="animation-delay:.3s">'+
+'<div class="xp-label">'+
+'<span>'+rank.emoji+' Nível '+state.level+' \u2014 '+rank.title+'</span>'+
+'<span>'+state.xp+'/'+xpNeeded+' XP</span>'+
+'</div>'+
+'<div class="xp-bar-wrap"><div class="xp-bar" style="width:'+xpPct+'%"></div></div>'+
+'</div>'+
+(state.level>oldLevel?'<div class="level-up-flash" onclick="this.remove()">\u{1F389} NÍVEL '+state.level+'!</div>':'')+
+'<div class="review-section anim-fiu" style="animation-delay:.35s">'+
+reviewBtnHtml+
+'<div id="reviewList" style="display:none"></div>'+
+'</div>'+
+'<div class="result-actions anim-fiu" style="animation-delay:.4s">'+
+'<button class="btn-primary" onclick="startMatch(\''+game.topic+'\')">\u{1F504} Revanche</button>'+
+'<button class="btn-secondary" style="width:100%" onclick="showScreen(\'topics\')">\u{1F4DA} Novo Tópico</button>'+
+'<button class="btn-secondary" style="width:100%" onclick="showScreen(\'home\')">\u{1F3E0} Início</button>'+
+'</div>';
+
+animateScoreCountUp('animPlayerScore',game.playerScore,800);
+animateScoreCountUp('animOppScore',game.opponentScore,800);
+}
+
+function animateScoreCountUp(elId,target,duration){
+var el=document.getElementById(elId);
+if(!el)return;
+var start=performance.now();
+function step(now){
+var elapsed=now-start;
+var progress=Math.min(elapsed/duration,1);
+var eased=1-Math.pow(1-progress,3);
+el.textContent=Math.round(target*eased);
+if(progress<1)requestAnimationFrame(step);
+}
+requestAnimationFrame(step);
+}
+
+function toggleReview(){
+var list=document.getElementById('reviewList');
+var btn=document.getElementById('reviewToggle');
+if(!list)return;
+if(list.style.display==='none'){
+list.style.display='block';
+btn.textContent='\u{1F4D6} Ocultar Revisão';
+var letters=['A','B','C','D'];
+var html=game.roundHistory.map(function(h,ri){
+var answersHtml=h.shuffled.map(function(a,ai){
+var cls='neutral';
+if(ai===h.correctIdx)cls='correct-answer';
+else if(ai===h.chosen&&!h.wasCorrect)cls='wrong-answer';
+var marker='';
+if(ai===h.chosen&&ai===h.correctIdx)marker='\u2705 ';
+else if(ai===h.chosen&&ai!==h.correctIdx)marker='\u274C ';
+else if(ai===h.correctIdx)marker='\u2705 ';
+return '<div class="review-answer '+cls+'">'+marker+letters[ai]+'. '+a+'</div>';
+}).join('');
+return '<div class="review-item anim-fiu" style="animation-delay:'+(ri*0.08)+'s">'+
+'<div class="review-q">Rodada '+(ri+1)+': '+h.q.q+'</div>'+
+answersHtml+
+(h.q.e?'<div class="review-explanation">\u{1F4A1} '+h.q.e+'</div>':'')+
+'</div>';
+}).join('');
+list.innerHTML='<div class="review-list">'+html+'</div>';
+}else{
+list.style.display='none';
+btn.textContent='\u{1F4D6} Revisar Perguntas';
+}
+}
+
+function spawnConfetti(){
+var colors=['#687BEA','#8B5CF6','#10B981','#FFD700','#FF6B35','#EF4444','#EC4899'];
+for(var i=0;i<40;i++){
+var el=document.createElement('div');
+el.className='confetti-piece';
+var size=4+Math.random()*8;
+var x=Math.random()*100;
+var delay=Math.random()*1.5;
+var dur=2+Math.random()*1.5;
+var rot=Math.random()*720;
+var rotEnd=rot+360+Math.random()*360;
+el.style.cssText='left:'+x+'vw;width:'+size+'px;height:'+size+'px;'+
+'background:'+colors[Math.floor(Math.random()*colors.length)]+';'+
+'border-radius:'+(Math.random()>0.5?'50%':'2px')+';'+
+'animation:none;opacity:1;top:-10px;';
+document.body.appendChild(el);
+animateConfettiPiece(el,x,delay,dur,rot,rotEnd,size);
+}
+}
+function animateConfettiPiece(el,x,delay,dur,rotStart,rotEnd,size){
+var startTime=null;
+var totalDur=(delay+dur)*1000;
+function step(now){
+if(!startTime)startTime=now;
+var elapsed=now-startTime;
+if(elapsed<delay*1000){requestAnimationFrame(step);return}
+var t=Math.min((elapsed-delay*1000)/(dur*1000),1);
+var y=-10+t*(window.innerHeight+20);
+var gravity=t*t*50;
+var sway=Math.sin(t*6)*20;
+var rot=rotStart+(rotEnd-rotStart)*t;
+var opacity=t>0.8?1-(t-0.8)/0.2:1;
+el.style.transform='translateY('+y+'px) translateX('+sway+'px) rotate('+rot+'deg)';
+el.style.opacity=opacity;
+el.style.top='0px';
+el.style.left=(x+sway/window.innerWidth*100)+'vw';
+if(t<1){requestAnimationFrame(step)}else{el.remove()}
+}
+requestAnimationFrame(step);
+}
+
+// ====== LEADERBOARD ======
+var lbFilter='geral';
+function renderLeaderboard(){
+if(!state.leaderboard)generateLeaderboard();
+var now=Date.now();
+var reset=state.lbResetDate||getNextMonday();
+var diff=Math.max(0,reset-now);
+var days=Math.floor(diff/(1000*60*60*24));
+var hours=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+
+var tabs=['geral'].concat(Object.keys(TOPICS_META));
+var lb=buildLeaderboard(lbFilter);
+
+var tabsHtml=tabs.map(function(t){
+var label=t==='geral'?'Geral':TOPICS_META[t].name;
+return '<button class="lb-tab'+(t===lbFilter?' active':'')+'" onclick="lbFilter=\''+t+'\';renderLeaderboard()">'+label+'</button>';
+}).join('');
+
+var listHtml=lb.map(function(e,i){
+var pos=i+1;
+var opp=OPPONENTS.find(function(o){return o.name===e.name});
+var photoHtml=opp&&opp.photo?'<img src="'+opp.photo+'" alt="">':
+e.isPlayer&&state.photo?'<img src="'+state.photo+'" alt="">':
+'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:15px;background:linear-gradient(135deg,var(--accent),#8B5CF6)">'+e.avatar+'</div>';
+var roleLabel=e.isPlayer?state.role+' | Nível '+toRoman(state.level):opp?(opp.role+' | '+(opp.rankTitle||'')):'';
+var medalCount=pos<=3?4-pos:0;
+var medalHtml='';
+for(var m=0;m<medalCount;m++){medalHtml+='<img src="design/img/medal.svg" alt="" style="width:12px;height:20px">';}
+var cls=e.isPlayer?' me':pos===1?' top1':pos===2?' top2':pos===3?' top3':'';
+var challengeBtn=e.isPlayer?'':'<button class="lb-challenge-btn" onclick="event.stopPropagation();challengeFromRanking(\''+e.name+'\')">DESAFIAR</button>';
+return '<div class="lb-entry'+cls+'">'+
+'<div class="lb-rank">'+pos+'</div>'+
+'<div style="display:flex;gap:2px;flex-shrink:0;width:24px">'+medalHtml+'</div>'+
+'<div class="lb-entry-avatar">'+photoHtml+'</div>'+
+'<div class="lb-entry-info">'+
+'<div class="lb-entry-name">'+e.name+(e.isPlayer?' (Você)':'')+'</div>'+
+'<div class="lb-entry-role">'+roleLabel+'</div>'+
+'</div>'+
+'<div class="lb-entry-pts">'+e.points+'</div>'+
+challengeBtn+
+'</div>';
+}).join('');
+
+document.getElementById('leaderboard').innerHTML=
+'<div class="screen-title anim-fiu" style="margin-bottom:8px">Ranking</div>'+
+'<div class="lb-tabs">'+tabsHtml+'</div>'+
+'<div class="lb-reset">Reseta em '+days+'d '+hours+'h</div>'+
+'<div class="lb-list">'+listHtml+'</div>';
+}
+
+// ====== PROFILE ======
+function renderProfile(){
+var rank=getRank(state.level);
+var xpNeeded=xpForLevel(state.level);
+var xpPct=Math.round(state.xp/xpNeeded*100);
+var winRate=state.gamesPlayed?Math.round(state.wins/state.gamesPlayed*100):0;
+var profilePhoto=state.photo?'<img src="'+state.photo+'" alt="">':state.avatar;
+var rankLabel='Nível '+toRoman(state.level);
+
+var medalsHtml=MEDAL_DEFS.map(function(m){
+var earned=m.check(state);
+return '<div class="medal'+(earned?'':' locked')+'">'+
+'<div>'+m.icon+'</div>'+
+'<div class="medal-name">'+m.name+'</div>'+
+'</div>';
+}).join('');
+
+document.getElementById('profile').innerHTML=
+'<div class="avatar xl anim-bi">'+profilePhoto+'</div>'+
+'<div class="profile-name anim-fiu">'+state.name+'</div>'+
+'<div class="profile-role anim-fiu">'+state.role+' | '+rankLabel+'</div>'+
+'<div class="rank-pill profile-rank anim-fiu" style="color:'+rank.color+';border:1px solid '+rank.color+'33;font-size:13px;padding:5px 14px">'+
+rank.emoji+' '+rank.title+
+'</div>'+
+'<div class="profile-level anim-fiu">'+
+'<div class="profile-level-label">'+
+'<span>'+rankLabel+'</span>'+
+'<span>'+state.xp+'/'+xpNeeded+' XP</span>'+
+'</div>'+
+'<div class="profile-xp-bar"><div class="profile-xp-fill" style="width:'+xpPct+'%"></div></div>'+
+'</div>'+
+'<div class="stats-grid anim-fiu">'+
+'<div class="stat-box"><div class="stat-val">'+state.gamesPlayed+'</div><div class="stat-label">Partidas</div></div>'+
+'<div class="stat-box"><div class="stat-val">'+winRate+'%</div><div class="stat-label">Vitórias</div></div>'+
+'<div class="stat-box"><div class="stat-val">'+state.totalPoints+'</div><div class="stat-label">Pontos</div></div>'+
+'<div class="stat-box"><div class="stat-val">'+state.coins+'</div><div class="stat-label">Moedas</div></div>'+
+'<div class="stat-box"><div class="stat-val">'+state.wins+'</div><div class="stat-label">Wins</div></div>'+
+'<div class="stat-box"><div class="stat-val">'+state.level+'</div><div class="stat-label">Nível</div></div>'+
+'</div>'+
+'<div class="medals-section anim-fiu">'+
+'<div class="section-title">Medalhas</div>'+
+'<div class="medals-grid">'+medalsHtml+'</div>'+
+'</div>';
+}
+
+// ====== SETTINGS ======
+function renderSettings(){
+var s=state.settings;
+document.getElementById('settings').innerHTML=
+'<div class="topics-header">'+
+'<button class="back-btn" onclick="showScreen(\'home\')">\u2190</button>'+
+'<div class="screen-title">Configurações</div>'+
+'</div>'+
+'<div class="card">'+
+'<div class="setting-row">'+
+'<span class="setting-label">\u{1F50A} Efeitos Sonoros</span>'+
+'<button class="toggle'+(s.sfx?' on':'')+'" onclick="toggleSetting(\'sfx\',this)"></button>'+
+'</div>'+
+'<div class="setting-row">'+
+'<span class="setting-label">\u{1F3B5} Música</span>'+
+'<button class="toggle'+(s.music?' on':'')+'" onclick="toggleSetting(\'music\',this)"></button>'+
+'</div>'+
+'<div class="setting-row">'+
+'<span class="setting-label">\u{1F4F3} Vibração</span>'+
+'<button class="toggle'+(s.vibration?' on':'')+'" onclick="toggleSetting(\'vibration\',this)"></button>'+
+'</div>'+
+'<div class="setting-row">'+
+'<span class="setting-label">\u{1F514} Notificações</span>'+
+'<button class="toggle'+(s.notifications?' on':'')+'" onclick="toggleSetting(\'notifications\',this)"></button>'+
+'</div>'+
+'<div class="setting-row">'+
+'<span class="setting-label">\u{1F512} Perfil Privado</span>'+
+'<button class="toggle'+(s.privateProfile?' on':'')+'" onclick="toggleSetting(\'privateProfile\',this)"></button>'+
+'</div>'+
+'</div>'+
+'<button class="btn-feedback" onclick="alert(\'Obrigado pelo feedback!\')">\u{1F4E9} Enviar Feedback</button>'+
+'<button class="btn-danger" onclick="doLogout()">Sair da Conta</button>';
+}
+
+function toggleSetting(key,el){
+state.settings[key]=!state.settings[key];
+el.classList.toggle('on');
+sfxClick();saveState();
+}
+
+function doLogout(){
+localStorage.removeItem('franqQuizV3');
+state=defaultState();
+showScreen('login');
+}
+
+// ====== CHAT ======
+var chatTab='news';
+var chatMessages=[
+{from:'Francisco Tavares',photo:'design/img/profile_francisco.jpg',text:'Alguém mais viu as novas perguntas de Compliance?',time:'14:32'},
+{from:'Karen Lopes',photo:'design/img/profile_karen.jpg',text:'Sim! Estão bem mais difíceis agora 😅',time:'14:35'},
+{from:'Francisco Tavares',photo:'design/img/profile_francisco.jpg',text:'Consegui 4/5 na primeira tentativa. Quem topa um desafio?',time:'14:38'},
+{from:'me',text:'Eu topo! Vamos ver quem manda melhor 💪',time:'14:40'},
+{from:'Marcio Godoy',photo:'design/img/profile_marcio.jpg',text:'Coloquem-me nessa também!',time:'14:42'},
+{from:'Karen Lopes',photo:'design/img/profile_karen.jpg',text:'Vou ficar de espectadora dessa batalha 😄',time:'14:45'}
+];
+
+function renderChat(){
+var backBtn='<button class="back-btn" onclick="showScreen(\'home\')" style="flex-shrink:0">\u2190</button>';
+var tabsHtml=
+'<div class="chat-tabs">'+
+'<button class="chat-tab'+(chatTab==='news'?' active':'')+'" onclick="chatTab=\'news\';renderChat()">Novidades</button>'+
+'<button class="chat-tab'+(chatTab==='chat'?' active':'')+'" onclick="chatTab=\'chat\';renderChat()">Chat Bankers</button>'+
+'</div>';
+
+var bodyHtml='';
+if(chatTab==='news'){
+bodyHtml=renderNewsTab();
+}else{
+bodyHtml=renderChatTab();
+}
+
+var inputBar=chatTab==='chat'?
+'<div class="chat-input-bar">'+
+'<input class="chat-input" id="chatInput" placeholder="Escreva uma mensagem..." autocomplete="off">'+
+'<button class="chat-send-btn" onclick="sendChatMsg()">\u27A4</button>'+
+'</div>':'';
+
+document.getElementById('chat').innerHTML=
+'<div class="chat-header">'+backBtn+tabsHtml+'</div>'+
+'<div class="chat-body" id="chatBody">'+bodyHtml+'</div>'+
+inputBar;
+
+if(chatTab==='chat'){
+var body=document.getElementById('chatBody');
+if(body)body.scrollTop=body.scrollHeight;
+}
+}
+
+function renderNewsTab(){
+var news=[
+{icon:'\u{1F381}',type:'bonus',title:'Bônus de Boas-Vindas!',desc:'Complete 3 partidas hoje e ganhe 50 moedas extras. Oferta válida até meia-noite!',time:'Agora',action:'quickPlay()',actionText:'Jogar Agora'},
+{icon:'\u2694\uFE0F',type:'challenge',title:'Desafio da Semana',desc:'Francisco Tavares desafiou você! Aceite e mostre quem é o melhor em Compliance.',time:'Há 2h',action:'challengeFromRanking(\'Francisco Tavares\')',actionText:'Aceitar Desafio'},
+{icon:'\u{1F4E2}',type:'info',title:'Novos Tópicos Disponíveis',desc:'Home Equity e Crédito Imobiliário agora têm novas perguntas atualizadas. Teste seus conhecimentos!',time:'Há 5h',action:null,actionText:null},
+{icon:'\u{1F525}',type:'event',title:'Evento: Semana da Compliance',desc:'Todas as partidas de Compliance valem pontos em dobro esta semana! Aproveite para subir no ranking.',time:'Há 1d',action:'startMatch(\'compliance\')',actionText:'Jogar Compliance'},
+{icon:'\u{1F3C6}',type:'info',title:'Ranking Semanal Resetado',desc:'O ranking foi zerado. É sua chance de conquistar o topo! Os 3 primeiros ganham badges exclusivos.',time:'Há 1d',action:'showScreen(\'leaderboard\')',actionText:'Ver Ranking'},
+{icon:'\u{1F4B0}',type:'bonus',title:'Recompensa de Streak',desc:'Você manteve uma sequência de 3 dias! Continue jogando para multiplicar suas moedas.',time:'Há 2d',action:null,actionText:null}
+];
+
+return news.map(function(n){
+var actionHtml=n.action?'<button class="news-action" onclick="'+n.action+'">'+n.actionText+'</button>':'';
+return '<div class="news-card anim-fiu">'+
+'<div class="news-icon '+n.type+'">'+n.icon+'</div>'+
+'<div class="news-content">'+
+'<div class="news-title">'+n.title+'</div>'+
+'<div class="news-desc">'+n.desc+'</div>'+
+'<div class="news-time">'+n.time+'</div>'+
+actionHtml+
+'</div>'+
+'</div>';
+}).join('');
+}
+
+function renderChatTab(){
+return chatMessages.map(function(m){
+var isMe=m.from==='me';
+var avatarHtml='';
+if(!isMe){
+avatarHtml='<div class="chat-msg-avatar">'+(m.photo?'<img src="'+m.photo+'" alt="">':m.from.charAt(0))+'</div>';
+}
+var nameHtml=isMe?'':'<div class="chat-bubble-name">'+m.from+'</div>';
+return '<div class="chat-msg '+(isMe?'me':'them')+'">'+
+avatarHtml+
+'<div class="chat-bubble">'+
+nameHtml+
+m.text+
+'<div class="chat-bubble-time">'+m.time+'</div>'+
+'</div>'+
+'</div>';
+}).join('');
+}
+
+function sendChatMsg(){
+var input=document.getElementById('chatInput');
+if(!input)return;
+var text=input.value.trim();
+if(!text)return;
+var now=new Date();
+var timeStr=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+chatMessages.push({from:'me',text:text,time:timeStr});
+input.value='';
+renderChat();
+// Simulate a reply after a short delay
+setTimeout(function(){
+var replies=[
+'Boa! Vamos jogar depois?','Concordo totalmente!','Haha, mandou bem! 🎯',
+'Alguém quer fazer um desafio de Consórcios?','Estou subindo no ranking, cuidado! 😎',
+'Ótima dica, vou testar isso.'
+];
+var responder=shuffle(OPPONENTS.filter(function(o){return o.photo}));
+if(responder.length>0){
+chatMessages.push({
+from:responder[0].name,photo:responder[0].photo,
+text:replies[Math.floor(Math.random()*replies.length)],
+time:timeStr
+});
+renderChat();
+}
+},1500+Math.random()*2000);
+}
+
+// ====== INITIALIZATION ======
+document.addEventListener('click',function(){initAudio()},{once:true});
+document.addEventListener('touchstart',function(){initAudio()},{once:true});
+loadState();
+runSplash();
+</script>
+</body>
+</html>
