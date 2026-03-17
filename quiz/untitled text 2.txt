@@ -1,4 +1,4 @@
-Using the Figma MCP, connect to file `https://www.figma.com/design/LLRzFBygVV3kbtQn9tsHeP/Design-System-Geral` and:
+Using the Figma MCP, connect to file `xxREVOKEDxx` and:
 1. List all icon components in the design system
 2. For each topic icon (mercado, investimentos, compliance, etc.) 
    find the closest matching icon component
